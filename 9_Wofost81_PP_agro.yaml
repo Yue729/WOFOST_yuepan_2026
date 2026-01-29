@@ -1,0 +1,13 @@
+AgroManagement:
+- 2019-02-11:
+    CropCalendar:
+      crop_end_date: 2019-09-20
+      crop_end_type: harvest
+      crop_name: potato
+      crop_start_date: 2019-05-12
+      crop_start_type: sowing
+      max_duration: 365
+      variety_name: Innovator
+    StateEvents: null
+    TimedEvents: {}
+Version: 1.0
