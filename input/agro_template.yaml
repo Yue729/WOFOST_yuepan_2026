@@ -1,0 +1,13 @@
+AgroManagement:
+- {start_campaign_date}:
+    CropCalendar:
+      crop_end_date: {crop_end_date}
+      crop_end_type: {crop_end_type}
+      crop_name: {crop_name}
+      crop_start_date: {crop_start_date}
+      crop_start_type: {crop_start_type}
+      max_duration: {max_duration}
+      variety_name: {variety_name}
+    StateEvents: null
+    TimedEvents: {{}}
+Version: 1.0

@@ -2,24 +2,23 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 from pcse.base import ParameterProvider
-from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider
+from pcse.input import CSVWeatherDataProvider, YAMLCropDataProvider
 from pcse.models import Wofost81_PP
 import yaml
 
-latitude = 51.98
-longitude = 5.66
-
 cwd = Path.cwd()
-agro_fp = cwd / "9_Wofost81_PP_agro.yaml"
-soil_fp = cwd / "9_Wofost81_PP_soil.yaml"
-site_fp = cwd / "9_Wofost81_PP_site.yaml"
-weather_fp = cwd / "9_weather.csv"
+input_dir = cwd / "input"
+agro_fp = input_dir / "9_Wofost81_PP_agro.yaml"
+soil_fp = input_dir / "9_Wofost81_PP_soil.yaml"
+site_fp = input_dir / "9_Wofost81_PP_site.yaml"
+weather_fp = input_dir / "9_weather.csv"
 
 output_dir = cwd / "output"
-fig_fp = output_dir / "output_sim_griddedweather.jpeg"
+fig_fp = output_dir / "output.jpeg"
 
 with open(agro_fp, "r") as f:
-    agro_dict = yaml.safe_load(f.read())
+    agro_text = f.read()
+    agro_dict = yaml.safe_load(agro_text)
 
 with open(soil_fp, "r") as f:
     soil_dict = yaml.safe_load(f.read())
@@ -28,7 +27,7 @@ with open(site_fp, "r") as f:
     site_dict = yaml.safe_load(f.read())
 
 crop_dict = YAMLCropDataProvider(Wofost81_PP)
-weather_data = NASAPowerWeatherDataProvider(latitude, longitude)
+weather_data = CSVWeatherDataProvider(weather_fp)
 parameters = ParameterProvider(sitedata=site_dict, soildata=soil_dict, cropdata=crop_dict)
 wofost = Wofost81_PP(parameters, weather_data, agro_dict)
 
