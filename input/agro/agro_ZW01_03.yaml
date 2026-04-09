@@ -1,0 +1,24 @@
+AgroManagement:
+- &id001 2022-10-19:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-07-21
+      crop_end_type: harvest
+      crop_name: wheat
+      variety_name: Winter_wheat_101
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id002 2025-03-17:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: 2025-09-12
+      crop_end_type: harvest
+      crop_name: sugarbeet
+      variety_name: Sugarbeet_601
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+Version: '1.0'

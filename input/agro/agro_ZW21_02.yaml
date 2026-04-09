@@ -1,0 +1,35 @@
+AgroManagement:
+- &id001 2022-10-12:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-07-21
+      crop_end_type: harvest
+      crop_name: wheat
+      variety_name: Winter_wheat_101
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id002 2024-04-30:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: 2024-09-05
+      crop_end_type: harvest
+      crop_name: seed_onion
+      variety_name: onion_agriadapt
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id003 2024-10-08:
+    CropCalendar:
+      crop_start_date: *id003
+      crop_start_type: sowing
+      crop_end_date: 2025-06-30
+      crop_end_type: harvest
+      crop_name: barley
+      variety_name: Spring_barley_301
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+Version: '1.0'

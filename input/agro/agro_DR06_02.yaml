@@ -1,0 +1,35 @@
+AgroManagement:
+- &id001 2023-05-04:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-12-09
+      crop_end_type: harvest
+      crop_name: sugarbeet
+      variety_name: Sugarbeet_601
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id002 2024-05-15:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: 2024-11-04
+      crop_end_type: harvest
+      crop_name: potato
+      variety_name: Potato_701
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id003 2025-03-16:
+    CropCalendar:
+      crop_start_date: *id003
+      crop_start_type: sowing
+      crop_end_date: 2025-07-28
+      crop_end_type: harvest
+      crop_name: barley
+      variety_name: Spring_barley_301
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+Version: '1.0'

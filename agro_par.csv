@@ -1,0 +1,403 @@
+﻿ID_all,ID_farm,ID_field,year,crop,variety,yield,date_planting,date_harvest,source_file
+DR01_01_2023,DR01,DR01_01,2023,Ware potato,Innovator,60,2023-05-03,2023-10-15,crop_registration_basic_DR01.xlsx
+DR01_01_2024,DR01,DR01_01,2024,Spring barley,Laureate,7,2024-03-21,2024-07-08,crop_registration_basic_DR01.xlsx
+DR01_01_2025,DR01,DR01_01,2025,Seed onion,SV3557ND,65,2025-03-25,2025-08-16,crop_registration_basic_DR01.xlsx
+DR01_02_2023,DR01,DR01_02,2023,Seed onion,SV3557ND,45,2023-05-03,2023-09-11,crop_registration_basic_DR01.xlsx
+DR01_02_2024,DR01,DR01_02,2024,Ware potato,Innovator,40,2024-05-08,2024-10-08,crop_registration_basic_DR01.xlsx
+DR01_02_2025,DR01,DR01_02,2025,Silage maize,,53,2025-05-01,2025-09-22,crop_registration_basic_DR01.xlsx
+DR01_03_2023,DR01,DR01_03,2023,Sugar beet,Annemonika KWS,70,2023-03-15,2023-11-20,crop_registration_basic_DR01.xlsx
+DR01_03_2024,DR01,DR01_03,2024,Silage maize,DairyMais,50,2024-05-30,2024-10-18,crop_registration_basic_DR01.xlsx
+DR01_03_2025,DR01,DR01_03,2025,Starch potato,Adelinde,50,2025-04-23,2025-10-29,crop_registration_basic_DR01.xlsx
+DR02_01_2023,DR02,DR02_01,2023,starch potato,bmc,35,2023-04-15,2023-11-15,crop_registration_basic_DR02.xlsx
+DR02_01_2024,DR02,DR02_01,2024,spring barley,,6,2024-03-27,2024-08-01,crop_registration_basic_DR02.xlsx
+DR02_01_2025,DR02,DR02_01,2025,seed onion,shakita,50,2025-03-24,2025-08-22,crop_registration_basic_DR02.xlsx
+DR02_02_2023,DR02,DR02_02,2023,silage maize,,48.6,2023-05-27,2023-10-11,crop_registration_basic_DR02.xlsx
+DR02_02_2024,DR02,DR02_02,2024,silage maize,,36.4,2024-05-18,2024-10-12,crop_registration_basic_DR02.xlsx
+DR02_02_2025,DR02,DR02_02,2025,starch potato,bmc,43.4,2025-04-07,2025-10-29,crop_registration_basic_DR02.xlsx
+DR02_03_2023,DR02,DR02_03,2023,starch potato,bmc,35,2023-05-02,2023-12-01,crop_registration_basic_DR02.xlsx
+DR02_03_2024,DR02,DR02_03,2024,starch potato,bmc,35,2024-05-05,2024-10-30,crop_registration_basic_DR02.xlsx
+DR02_03_2025,DR02,DR02_03,2025,spring barley,applaus,7,2025-03-22,2025-07-28,crop_registration_basic_DR02.xlsx
+DR03_01_2023,DR03,DR03_01,2023,Starch potato,Avamond,48,2023-04-18,2023-10-16,crop_registration_basic_DR03.xlsx
+DR03_01_2024,DR03,DR03_01,2024,Sugar beet,BTS 4190 RHC,82,2024-04-29,2024-11-19,crop_registration_basic_DR03.xlsx
+DR03_01_2025,DR03,DR03_01,2025,Starch potato,BMC,37.5,2025-04-14,2025-10-20,crop_registration_basic_DR03.xlsx
+DR03_02_2023,DR03,DR03_02,2023,Faba bean,,4.35,2023-04-07,2023-08-12,crop_registration_basic_DR03.xlsx
+DR03_02_2024,DR03,DR03_02,2024,Starch potato,Avamond,45,2024-05-06,2024-10-17,crop_registration_basic_DR03.xlsx
+DR03_02_2025,DR03,DR03_02,2025,Sugar beet,Fadela KWS,80,2025-04-09,2025-11-22,crop_registration_basic_DR03.xlsx
+DR03_03_2023,DR03,DR03_03,2023,Sugar beet,Annemartha KWS,84,2023-04-08,2023-11-24,crop_registration_basic_DR03.xlsx
+DR03_03_2024,DR03,DR03_03,2024,Starch potato,Adelinde,47,2024-05-06,2024-10-29,crop_registration_basic_DR03.xlsx
+DR03_03_2025,DR03,DR03_03,2025,Spring wheat,,4.75,2025-03-19,2025-08-11,crop_registration_basic_DR03.xlsx
+DR04_01_2023,DR04,DR04_01,2023,Grass,,,,,crop_registration_basic_DR04.xlsx
+DR04_01_2024,DR04,DR04_01,2024,Grass,,,,,crop_registration_basic_DR04.xlsx
+DR04_01_2025,DR04,DR04_01,2025,Starch potato,BMC,50,2025-04-17,2025-10-08,crop_registration_basic_DR04.xlsx
+DR04_02_2023,DR04,DR04_02,2023,Spring barley,Irina KWS,3,2023-04-08,2023-08-10,crop_registration_basic_DR04.xlsx
+DR04_02_2024,DR04,DR04_02,2024,Onion sets,,50,2024-04-02,2024-08-10,crop_registration_basic_DR04.xlsx
+DR04_02_2025,DR04,DR04_02,2025,Starch potato,Seresta,45,2025-04-14,2025-09-20,crop_registration_basic_DR04.xlsx
+DR04_03_2023,DR04,DR04_03,2023,Starch potato,Novano,52,2023-04-28,2023-10-25,crop_registration_basic_DR04.xlsx
+DR04_03_2024,DR04,DR04_03,2024,Silage maize,,,,,crop_registration_basic_DR04.xlsx
+DR04_03_2025,DR04,DR04_03,2025,Spring barley,Irina KWS,9,2025-03-21,2025-07-26,crop_registration_basic_DR04.xlsx
+DR05_01_2023,DR05,DR05_01,2023,Starch potato,BMC,50,2023-04-20,2023-10-16,crop_registration_basic_DR05.xlsx
+DR05_01_2024,DR05,DR05_01,2024,Spring barley,Applaus,8,2024-03-27,2024-07-31,crop_registration_basic_DR05.xlsx
+DR05_01_2025,DR05,DR05_01,2025,Seed onion,Highway,84,2025-03-21,2025-08-18,crop_registration_basic_DR05.xlsx
+DR05_02_2023,DR05,DR05_02,2023,Ware potato,Fontane,45,2023-04-18,2023-10-04,crop_registration_basic_DR05.xlsx
+DR05_02_2024,DR05,DR05_02,2024,Silage maize,,45.5,2024-05-04,2024-10-15,crop_registration_basic_DR05.xlsx
+DR05_02_2025,DR05,DR05_02,2025,Starch potato,BMC,40,2025-03-21,2025-08-25,crop_registration_basic_DR05.xlsx
+DR05_03_2023,DR05,DR05_03,2023,Ware potato,Fontane,50,2023-04-24,2023-09-28,crop_registration_basic_DR05.xlsx
+DR05_03_2024,DR05,DR05_03,2024,Seed onion,Hyway,65,2024-04-02,2024-09-19,crop_registration_basic_DR05.xlsx
+DR05_03_2025,DR05,DR05_03,2025,Sugar beet,Annemartha KWS,93,2025-03-12,2025-11-20,crop_registration_basic_DR05.xlsx
+DR06_01_2023,DR06,DR06_01,2023,Grass ,,,,,crop_registration_basic_DR06.xlsx
+DR06_01_2024,DR06,DR06_01,2024,Grass ,,,,,crop_registration_basic_DR06.xlsx
+DR06_01_2025,DR06,DR06_01,2025,Sugar beet,BTS 4190 RHC,100,2025-03-28,2025-10-10,crop_registration_basic_DR06.xlsx
+DR06_02_2023,DR06,DR06_02,2023,Sugar beet, BTS 4190 RHC,75,2023-05-04,2024-12-09,crop_registration_basic_DR06.xlsx
+DR06_02_2024,DR06,DR06_02,2024,Starch potato,Adelinde,40,2024-05-15,2024-11-04,crop_registration_basic_DR06.xlsx
+DR06_02_2025,DR06,DR06_02,2025,Spring barley,Applaus,9,2025-03-16,2025-07-28,crop_registration_basic_DR06.xlsx
+DR06_03_2023,DR06,DR06_03,2023,Grass ,,,,,crop_registration_basic_DR06.xlsx
+DR06_03_2024,DR06,DR06_03,2024,Sugar beet,BTS 4190 RHC,100,2024-05-03,2024-12-03,crop_registration_basic_DR06.xlsx
+DR06_03_2025,DR06,DR06_03,2025,Seed onion,Hytech,65,2025-03-24,2025-08-22,crop_registration_basic_DR06.xlsx
+DR08_01_2023,DR08,DR08_01,2023,Starch potato,Sofista,45,2023-04-26,2023-11-02,crop_registration_basic_DR08.xlsx
+DR08_01_2024,DR08,DR08_01,2024,Sugar beet,Edonia KWS,102.62,2024-04-11,2024-11-29,crop_registration_basic_DR08.xlsx
+DR08_01_2025,DR08,DR08_01,2025,Ware potato,King Russet,55,2025-04-08,2025-09-17,crop_registration_basic_DR08.xlsx
+DR08_02_2023,DR08,DR08_02,2023,Grass,,,,,crop_registration_basic_DR08.xlsx
+DR08_02_2024,DR08,DR08_02,2024,Ware potato,Fontane,50,2024-05-01,2024-09-30,crop_registration_basic_DR08.xlsx
+DR08_02_2025,DR08,DR08_02,2025,Sugar beet,Edonia KWS,97,2025-03-27,2025-11-20,crop_registration_basic_DR08.xlsx
+DR08_03_2023,DR08,DR08_03,2023,Ware potato,Fontane,45,2023-04-19,2023-10-10,crop_registration_basic_DR08.xlsx
+DR08_03_2024,DR08,DR08_03,2024,Silage maize,,45,2024-05-01,2024-07-31,crop_registration_basic_DR08.xlsx
+DR08_03_2025,DR08,DR08_03,2025,Seed onion,Hyroad,59,2025-03-28,2025-08-27,crop_registration_basic_DR08.xlsx
+DR09_01_2023,DR09,DR09_01,2023,Starch potato,Avamond,57,2023-05-17,2023-11-05,crop_registration_basic_DR09.xlsx
+DR09_01_2024,DR09,DR09_01,2024,Silage maize,,45,2024-04-25,2024-10-25,crop_registration_basic_DR09.xlsx
+DR09_01_2025,DR09,DR09_01,2025,Spring barley,Applaus,7.8,2025-03-15,2025-08-08,crop_registration_basic_DR09.xlsx
+DR09_02_2023,DR09,DR09_02,2023,Spring wheat,Starlight,8,2023-04-18,2023-08-20,crop_registration_basic_DR09.xlsx
+DR09_02_2024,DR09,DR09_02,2024,Silage maize,,45,2024-04-25,2024-10-25,crop_registration_basic_DR09.xlsx
+DR09_02_2025,DR09,DR09_02,2025,Starch potato,Avenger,45,2025-04-17,2025-10-17,crop_registration_basic_DR09.xlsx
+DR09_03_2023,DR09,DR09_03,2023,Starch potato,BMC,48,2023-04-22,2023-10-28,crop_registration_basic_DR09.xlsx
+DR09_03_2024,DR09,DR09_03,2024,Sugar beet,Annemonika,85,2024-05-01,2024-10-20,crop_registration_basic_DR09.xlsx
+DR09_03_2025,DR09,DR09_03,2025,Seed Onion,Hyroad,60,2025-04-02,2025-08-19,crop_registration_basic_DR09.xlsx
+DR09_04_2023,DR09,DR09_04,2023,Starch potato,Seresta,50,2023-04-22,2023-08-31,crop_registration_basic_DR09.xlsx
+DR09_04_2024,DR09,DR09_04,2024,Sugar beet,Annemonika,93,2024-04-19,2024-12-02,crop_registration_basic_DR09.xlsx
+DR09_04_2025,DR09,DR09_04,2025,Spring barley,Applaus,8.1,2025-03-18,2025-08-08,crop_registration_basic_DR09.xlsx
+DR10_01_2023,DR10,DR10_01,2023,Spring barley,Irina KWS,6.6,2023-04-18,2023-07-27,crop_registration_basic_DR10.xlsx
+DR10_01_2024,DR10,DR10_01,2024,Sugar beet,BTS4190RHC,86.5,2024-04-13,2024-11-05,crop_registration_basic_DR10.xlsx
+DR10_01_2025,DR10,DR10_01,2025,Starch potato,Festien,55,2025-04-07,2025-10-13,crop_registration_basic_DR10.xlsx
+DR10_02_2023,DR10,DR10_02,2023,,,,,,crop_registration_basic_DR10.xlsx
+DR10_02_2024,DR10,DR10_02,2024,,,,,,crop_registration_basic_DR10.xlsx
+DR10_02_2025,DR10,DR10_02,2025,Spring barley,Applaus,8,2025-03-24,2025-07-19,crop_registration_basic_DR10.xlsx
+DR10_03_2023,DR10,DR10_03,2023,Ware potato,King Russet,50,2023-04-17,2023-09-29,crop_registration_basic_DR10.xlsx
+DR10_03_2024,DR10,DR10_03,2024,Grass,,,,,crop_registration_basic_DR10.xlsx
+DR10_03_2025,DR10,DR10_03,2025,Sugar beet,Annemartha KWS,75,2025-03-24,2025-11-20,crop_registration_basic_DR10.xlsx
+DR10_04_2023,DR10,DR10_04,2023,Starch potato,Avamond,55,2023-04-21,2023-10-15,crop_registration_basic_DR10.xlsx
+DR10_04_2024,DR10,DR10_04,2024,Spring barley,Laureate,9.0671,2024-03-23,2024-07-24,crop_registration_basic_DR10.xlsx
+DR10_04_2025,DR10,DR10_04,2025,Seed onion,Vento,70,2025-03-28,2025-08-25,crop_registration_basic_DR10.xlsx
+DR11_01_2023,DR11,DR11_01,2023,Starch potato,BMC,49.62,2023-04-21,2023-10-14,crop_registration_basic_DR11.xlsx
+DR11_01_2024,DR11,DR11_01,2024,Grain maize,Mais LG Ashley,11.4,2024-05-23,2024-11-12,crop_registration_basic_DR11.xlsx
+DR11_01_2025,DR11,DR11_01,2025,Starch potato,Avamond,60.06,2025-04-09,2025-10-10,crop_registration_basic_DR11.xlsx
+DR11_02_2023,DR11,DR11_02,2023,Starch potato,BMC,45.75,2023-05-02,2023-11-07,crop_registration_basic_DR11.xlsx
+DR11_02_2024,DR11,DR11_02,2024,Silage maize,Excellent,55,2024-05-01,2024-09-19,crop_registration_basic_DR11.xlsx
+DR11_02_2025,DR11,DR11_02,2025,Winter wheat,Extase,8.3,2024-11-02,2025-08-03,crop_registration_basic_DR11.xlsx
+DR11_03_2023,DR11,DR11_03,2023,Starch potato,Axion,52.52,2023-05-03,2023-10-16,crop_registration_basic_DR11.xlsx
+DR11_03_2024,DR11,DR11_03,2024,Yellow field pea,Japanse,5.1,2024-05-10,2024-08-19,crop_registration_basic_DR11.xlsx
+DR11_03_2025,DR11,DR11_03,2025,Sugar beet,Annemartha,100,2025-03-27,2025-12-01,crop_registration_basic_DR11.xlsx
+DR12_01_2023,DR12,DR12_01,2023,Starch potato,Supporter,45,2023-04-29,2023-12-02,crop_registration_basic_DR12.xlsx
+DR12_01_2024,DR12,DR12_01,2024,Sugar beet,,90,2024-05-09,2024-11-13,crop_registration_basic_DR12.xlsx
+DR12_01_2025,DR12,DR12_01,2025,Spring barley,Applaus,6.5,2025-03-15,2025-07-24,crop_registration_basic_DR12.xlsx
+DR12_02_2023,DR12,DR12_02,2023,Starch potato,BMC,40,2023-05-14,2023-12-30,crop_registration_basic_DR12.xlsx
+DR12_02_2024,DR12,DR12_02,2024,Spring barley,Applaus,6,2024-05-14,2024-08-13,crop_registration_basic_DR12.xlsx
+DR12_02_2025,DR12,DR12_02,2025,Sugar beet,Tessilia KWS,110,2025-03-25,2025-11-03,crop_registration_basic_DR12.xlsx
+DR12_03_2023,DR12,DR12_03,2023,Sugar beet ,Tessilia KWS,95,2023-04-26,2023-11-12,crop_registration_basic_DR12.xlsx
+DR12_03_2024,DR12,DR12_03,2024,Spring barley,Applaus,6.05,2024-05-11,2024-08-19,crop_registration_basic_DR12.xlsx
+DR12_03_2025,DR12,DR12_03,2025,Starch potato,Festien,50,2025-04-09,2025-10-21,crop_registration_basic_DR12.xlsx
+DR12_04_2023,DR12,DR12_04,2023,Sugar beet ,Tessilia KWS,93,2023-04-18,2023-12-02,crop_registration_basic_DR12.xlsx
+DR12_04_2024,DR12,DR12_04,2024,Starch potato,Festien,45,2024-04-30,2024-10-24,crop_registration_basic_DR12.xlsx
+DR12_04_2025,DR12,DR12_04,2025,Seed onion,SV3557ND,65,2025-04-02,2025-09-14,crop_registration_basic_DR12.xlsx
+DR13_01_2023,DR13,DR13_01,2023,Spring barley,,6.1,2023-04-18,2023-08-16,crop_registration_basic_DR13.xlsx
+DR13_01_2024,DR13,DR13_01,2024,Seed onion,Hyfort,40,2024-04-13,2024-09-20,crop_registration_basic_DR13.xlsx
+DR13_01_2025,DR13,DR13_01,2025,Sugar beet,Rentabla KWS,90,2025-03-19,2025-12-04,crop_registration_basic_DR13.xlsx
+DR13_02_2023,DR13,DR13_02,2023,Starch potato,BMC,45,2023-04-22,2023-10-24,crop_registration_basic_DR13.xlsx
+DR13_02_2024,DR13,DR13_02,2024,Sugar beet,Annemartha KWS,90,2024-04-11,2024-12-04,crop_registration_basic_DR13.xlsx
+DR13_02_2025,DR13,DR13_02,2025,Starch potato,BMC,47,2025-04-07,2025-10-08,crop_registration_basic_DR13.xlsx
+DR13_03_2023,DR13,DR13_03,2023,Starch potato,BMC,45,2023-04-21,2023-10-22,crop_registration_basic_DR13.xlsx
+DR13_03_2024,DR13,DR13_03,2024,Winter wheat,Agrimix noord,8,2023-10-18,2024-07-19,crop_registration_basic_DR13.xlsx
+DR13_03_2025,DR13,DR13_03,2025,Seed onion,Hyroad,70,2025-03-21,2025-08-23,crop_registration_basic_DR13.xlsx
+DR13_04_2023,DR13,DR13_04,2023,Sugar beet,Annemartha KWS,75,2023-04-20,2023-10-07,crop_registration_basic_DR13.xlsx
+DR13_04_2024,DR13,DR13_04,2024,Starch potato,BMC,45,2024-04-30,2024-10-09,crop_registration_basic_DR13.xlsx
+DR13_04_2025,DR13,DR13_04,2025,Spring barley,Applause,,2025-03-13,2025-07-24,crop_registration_basic_DR13.xlsx
+DR14_01_2023,DR14,DR14_01,2023,Winter barley,Pixel,8.29,2022-10-17,2023-07-07,crop_registration_basic_DR14.xlsx
+DR14_01_2024,DR14,DR14_01,2024,Starch potato,BMC,57.3,2024-04-18,2024-10-23,crop_registration_basic_DR14.xlsx
+DR14_01_2025,DR14,DR14_01,2025,Sugar beet,BTS Smart 1645 N,107,2025-03-28,2025-11-29,crop_registration_basic_DR14.xlsx
+DR14_02_2023,DR14,DR14_02,2023,Sugar beet,BTS Smart 1645 N,88,2023-04-17,2023-12-01,crop_registration_basic_DR14.xlsx
+DR14_02_2024,DR14,DR14_02,2024,Silage maize,,55,2024-05-05,2024-09-29,crop_registration_basic_DR14.xlsx
+DR14_02_2025,DR14,DR14_02,2025,Starch potato,BMC,47,2025-05-02,2025-10-18,crop_registration_basic_DR14.xlsx
+DR14_03_2023,DR14,DR14_03,2023,Sugar beet,Annemartha,86,2023-04-20,2023-11-28,crop_registration_basic_DR14.xlsx
+DR14_03_2024,DR14,DR14_03,2024,Spring barley,KWS Irinia,7.19,2024-03-18,2024-07-26,crop_registration_basic_DR14.xlsx
+DR14_03_2025,DR14,DR14_03,2025,Seed onion,Dormo,58,2025-03-18,2025-08-11,crop_registration_basic_DR14.xlsx
+DR14_04_2023,DR14,DR14_04,2023,Starch potato,BMC,41,2023-04-18,2023-10-26,crop_registration_basic_DR14.xlsx
+DR14_04_2024,DR14,DR14_04,2024,Sugar beet,Annemartha,77,2024-04-02,2024-10-24,crop_registration_basic_DR14.xlsx
+DR14_04_2025,DR14,DR14_04,2025,Spring barley,Applause,7.2,2025-04-01,2025-08-09,crop_registration_basic_DR14.xlsx
+DR15_01_2023,DR15,DR15_01,2023,Starch potato,Avamond,35,2023-05-16,2023-11-09,crop_registration_basic_DR15.xlsx
+DR15_01_2024,DR15,DR15_01,2024,Spring barley ,prestige ,6.8,2024-04-06,2024-08-02,crop_registration_basic_DR15.xlsx
+DR15_01_2025,DR15,DR15_01,2025,Sugar beet,BTS 990,85,2025-04-01,2025-10-14,crop_registration_basic_DR15.xlsx
+DR15_02_2023,DR15,DR15_02,2023,Sugar beet,Annemartha KWS,70,2023-05-17,2023-11-23,crop_registration_basic_DR15.xlsx
+DR15_02_2024,DR15,DR15_02,2024,Starch potato,Avamond,45,2024-05-18,2024-10-29,crop_registration_basic_DR15.xlsx
+DR15_02_2025,DR15,DR15_02,2025,Spring barley ,prestige ,7,2025-03-17,2025-07-18,crop_registration_basic_DR15.xlsx
+DR15_03_2023,DR15,DR15_03,2023,Spring barley ,propino,6.5,2023-04-20,2023-08-02,crop_registration_basic_DR15.xlsx
+DR15_03_2024,DR15,DR15_03,2024,Sugar beet,BTS 3480 N,65,2024-04-29,2024-11-18,crop_registration_basic_DR15.xlsx
+DR15_03_2025,DR15,DR15_03,2025,Starch potato,Avamond,51,2025-04-05,2025-10-01,crop_registration_basic_DR15.xlsx
+DR17_01_2023,DR17,DR17_01,2023,Starch potato,BMC,41,2023-04-27,2023-10-12,crop_registration_basic_DR17.xlsx
+DR17_01_2024,DR17,DR17_01,2024,Spring barley,Laureate,8,2024-03-14,2024-07-31,crop_registration_basic_DR17.xlsx
+DR17_01_2025,DR17,DR17_01,2025,Starch potato,BMC,40,2025-05-06,2025-10-02,crop_registration_basic_DR17.xlsx
+DR17_02_2023,DR17,DR17_02,2023,Winter wheat,Graham,10.4,2022-10-25,2023-08-16,crop_registration_basic_DR17.xlsx
+DR17_02_2024,DR17,DR17_02,2024,Starch potato,BMC,40,2024-05-03,2024-10-04,crop_registration_basic_DR17.xlsx
+DR17_02_2025,DR17,DR17_02,2025,Sugar beet,Leontina KWS,94,2025-03-25,2025-12-18,crop_registration_basic_DR17.xlsx
+DR17_03_2023,DR17,DR17_03,2023,Sugar beet,Leontina KWS,102,2023-04-18,2023-11-01,crop_registration_basic_DR17.xlsx
+DR17_03_2024,DR17,DR17_03,2024,Starch potato,BMC,40,2024-05-06,2024-10-02,crop_registration_basic_DR17.xlsx
+DR17_03_2025,DR17,DR17_03,2025,Winter wheat,Calgary,9.7,2024-11-04,2025-08-12,crop_registration_basic_DR17.xlsx
+DR18_01_2023,DR18,DR18_01,2023,Sugar beet,BTS 1115N,95.18959,2023-04-20,2023-12-05,crop_registration_basic_DR18.xlsx
+DR18_01_2024,DR18,DR18_01,2024,Starch potato,BMC,44.3669,2024-05-20,2024-11-01,crop_registration_basic_DR18.xlsx
+DR18_01_2025,DR18,DR18_01,2025,Spring barley,Applaus,7.1696755,2025-04-24,2025-07-24,crop_registration_basic_DR18.xlsx
+DR18_02_2023,DR18,DR18_02,2023,Ware potato,Fontane,57.10879,2023-05-03,2023-10-11,crop_registration_basic_DR18.xlsx
+DR18_02_2024,DR18,DR18_02,2024,Spring barley,Propino,6.16197,2024-05-07,2024-08-12,crop_registration_basic_DR18.xlsx
+DR18_02_2025,DR18,DR18_02,2025,Sugar beet,Lincoln,85,2025-04-05,2025-11-30,crop_registration_basic_DR18.xlsx
+DR18_03_2023,DR18,DR18_03,2023,Spring barley,Laureate,5.34947,2023-04-20,2023-08-10,crop_registration_basic_DR18.xlsx
+DR18_03_2024,DR18,DR18_03,2024,Sugar beet,Reforma KWS,80.21134,2024-05-11,2024-12-03,crop_registration_basic_DR18.xlsx
+DR18_03_2025,DR18,DR18_03,2025,Starch potato,Festien,49.628309,2025-04-17,2025-11-05,crop_registration_basic_DR18.xlsx
+DR19_01_2023,DR19,DR19_01,2023,grass,,,,,crop_registration_basic_DR19.xlsx
+DR19_01_2024,DR19,DR19_01,2024,grass,,,,,crop_registration_basic_DR19.xlsx
+DR19_01_2025,DR19,DR19_01,2025,starch potato,,50,2025-04-12,2025-10-22,crop_registration_basic_DR19.xlsx
+DR19_02_2023,DR19,DR19_02,2023,sugar beet,,90,2023-04-21,2023-12-07,crop_registration_basic_DR19.xlsx
+DR19_02_2024,DR19,DR19_02,2024,silage maize,,,,,crop_registration_basic_DR19.xlsx
+DR19_02_2025,DR19,DR19_02,2025,winter barley,,6,,2025-07-15,crop_registration_basic_DR19.xlsx
+DR19_03_2023,DR19,DR19_03,2023,sugar beet,,90,2023-04-21,2023-12-07,crop_registration_basic_DR19.xlsx
+DR19_03_2024,DR19,DR19_03,2024,seed potato,Markies,45,2024-04-30,2024-09-17,crop_registration_basic_DR19.xlsx
+DR19_03_2025,DR19,DR19_03,2025,spring barley,applause,6.5,2025-03-15,2025-07-15,crop_registration_basic_DR19.xlsx
+ZW01_01_2023,ZW01,ZW01_01,2023,chicory,Maestoso,48.525,2023-04-22,2023-09-26,crop_registration_basic_ZW01.xlsx
+ZW01_01_2024,ZW01,ZW01_01,2024,ware potato,Artemis,31.61253,2024-05-02,2024-09-07,crop_registration_basic_ZW01.xlsx
+ZW01_01_2025,ZW01,ZW01_01,2025,winter wheat,Addiction SU,12.843,2024-10-17,2025-07-15,crop_registration_basic_ZW01.xlsx
+ZW01_02_2023,ZW01,ZW01_02,2023,common bean,Kamaron,16.91403,2023-06-22,2023-09-08,crop_registration_basic_ZW01.xlsx
+ZW01_02_2024,ZW01,ZW01_02,2024,winter wheat,Chevignon,7.06691,2023-11-07,2024-07-29,crop_registration_basic_ZW01.xlsx
+ZW01_02_2025,ZW01,ZW01_02,2025,ware potato,Artemis,56,2025-03-26,2025-09-02,crop_registration_basic_ZW01.xlsx
+ZW01_03_2023,ZW01,ZW01_03,2023,winter wheat,Extase KWS,10.32266,2022-10-19,2023-07-21,crop_registration_basic_ZW01.xlsx
+ZW01_03_2024,ZW01,ZW01_03,2024,common bean,Flanker,16.0332,2024-06-28,2024-09-03,crop_registration_basic_ZW01.xlsx
+ZW01_03_2025,ZW01,ZW01_03,2025,sugar beet,BTS 2655 N,92,2025-03-17,2025-09-12,crop_registration_basic_ZW01.xlsx
+ZW02_01_2023,ZW02,ZW02_01,2023,winter wheat,Reform RGT,11.6,2022-10-22,2023-07-21,crop_registration_basic_ZW02.xlsx
+ZW02_01_2024,ZW02,ZW02_01,2024,sugar beet,Leontina KWS,92,2024-04-13,2024-10-19,crop_registration_basic_ZW02.xlsx
+ZW02_01_2025,ZW02,ZW02_01,2025,winter wheat,Chevignon,12,2024-10-20,2025-07-10,crop_registration_basic_ZW02.xlsx
+ZW02_02_2023,ZW02,ZW02_02,2023,winter wheat,Calgary,10.5,2022-10-22,2023-07-19,crop_registration_basic_ZW02.xlsx
+ZW02_02_2024,ZW02,ZW02_02,2024,broad bean,Duet,7.5,2024-05-14,2024-08-09,crop_registration_basic_ZW02.xlsx
+ZW02_02_2025,ZW02,ZW02_02,2025,ware potato,Melody,60,2025-04-07,2025-10-07,crop_registration_basic_ZW02.xlsx
+ZW02_03_2023,ZW02,ZW02_03,2023,ware potato,Melody,50,2023-05-23,2023-10-10,crop_registration_basic_ZW02.xlsx
+ZW02_03_2024,ZW02,ZW02_03,2024,winter wheat,Benchmark,8.5,2023-10-12,2024-08-12,crop_registration_basic_ZW02.xlsx
+ZW02_03_2025,ZW02,ZW02_03,2025,sugar beet,Leontina KWS,117,2025-03-15,2025-10-24,crop_registration_basic_ZW02.xlsx
+ZW03_01_2023,ZW03,ZW03_01,2023,,,,,,crop_registration_basic_ZW03.xlsx
+ZW03_01_2024,ZW03,ZW03_01,2024,sugar beet,BTS 990,74.6,2024-05-11,2024-12-03,crop_registration_basic_ZW03.xlsx
+ZW03_01_2025,ZW03,ZW03_01,2025,winter wheat,chevignon,10.6,2024-12-04,2025-07-19,crop_registration_basic_ZW03.xlsx
+ZW03_02_2023,ZW03,ZW03_02,2023,,,,,,crop_registration_basic_ZW03.xlsx
+ZW03_02_2024,ZW03,ZW03_02,2024,winter wheat,,8,,2024-08-01,crop_registration_basic_ZW03.xlsx
+ZW03_02_2025,ZW03,ZW03_02,2025,ware potato,kingsman,65,2025-04-12,2025-10-18,crop_registration_basic_ZW03.xlsx
+ZW03_03_2023,ZW03,ZW03_03,2023,,,,,,crop_registration_basic_ZW03.xlsx
+ZW03_03_2024,ZW03,ZW03_03,2024,ware potato,kingsman,45,2024-06-08,2024-10-26,crop_registration_basic_ZW03.xlsx
+ZW03_03_2025,ZW03,ZW03_03,2025,sugar beet,Leontina KWS,110,2025-03-19,2025-11-14,crop_registration_basic_ZW03.xlsx
+ZW04_01_2023,ZW04,ZW04_01,2023,winter wheat,Extase KWS,11.6,2022-10-11,2023-07-19,crop_registration_basic_ZW04.xlsx
+ZW04_01_2024,ZW04,ZW04_01,2024,sugar beet,BTS 1375,82.80389,2024-04-24,2024-11-02,crop_registration_basic_ZW04.xlsx
+ZW04_01_2025,ZW04,ZW04_01,2025,winter wheat,Extase KWS,11.8284456,2024-11-04,2025-07-15,crop_registration_basic_ZW04.xlsx
+ZW04_02_2023,ZW04,ZW04_02,2023,sugar beet,Tessilia KWS,92,2023-05-04,2023-10-18,crop_registration_basic_ZW04.xlsx
+ZW04_02_2024,ZW04,ZW04_02,2024,winter wheat,Extase KWS,8.24417,2023-11-24,2024-07-30,crop_registration_basic_ZW04.xlsx
+ZW04_02_2025,ZW04,ZW04_02,2025,ware potato,Fontane,55,2025-04-08,2025-10-01,crop_registration_basic_ZW04.xlsx
+ZW04_03_2023,ZW04,ZW04_03,2023,sweet corn,Mint,15,2023-06-05,2023-09-04,crop_registration_basic_ZW04.xlsx
+ZW04_03_2024,ZW04,ZW04_03,2024,winter wheat,extase KWS,8.24417,2023-11-24,2024-07-30,crop_registration_basic_ZW04.xlsx
+ZW04_03_2025,ZW04,ZW04_03,2025,sugar beet,BTS 1375,100,2025-03-18,2025-10-13,crop_registration_basic_ZW04.xlsx
+ZW05_01_2023,ZW05,ZW05_01,2023,winter wheat,Chevignon,8.038,2022-12-20,2023-07-22,crop_registration_basic_ZW05.xlsx
+ZW05_01_2024,ZW05,ZW05_01,2024,ware potato,Markies,55.546,2024-05-01,2024-10-27,crop_registration_basic_ZW05.xlsx
+ZW05_01_2025,ZW05,ZW05_01,2025,winter wheat,Extase,9.076,2024-10-27,2025-07-15,crop_registration_basic_ZW05.xlsx
+ZW05_02_2023,ZW05,ZW05_02,2023,peas,Amalfi,6.9424,2023-06-01,2023-08-09,crop_registration_basic_ZW05.xlsx
+ZW05_02_2024,ZW05,ZW05_02,2024,seed onion,Hyfive,54.828,2024-04-14,2024-09-21,crop_registration_basic_ZW05.xlsx
+ZW05_02_2025,ZW05,ZW05_02,2025,ware potato,Melody,59.565,2025-03-28,2025-09-25,crop_registration_basic_ZW05.xlsx
+ZW05_03_2023,ZW05,ZW05_03,2023,winter wheat,Calgary,9.021,2022-09-25,2023-07-19,crop_registration_basic_ZW05.xlsx
+ZW05_03_2024,ZW05,ZW05_03,2024,sprouts,Silvia,30.415,2024-04-24,2024-09-19,crop_registration_basic_ZW05.xlsx
+ZW05_03_2025,ZW05,ZW05_03,2025,seed onion,Motion,70,2025-03-17,2025-08-18,crop_registration_basic_ZW05.xlsx
+ZW05_04_2023,ZW05,ZW05_04,2023,ware potato,Agria,50,2023-05-03,2023-10-06,crop_registration_basic_ZW05.xlsx
+ZW05_04_2024,ZW05,ZW05_04,2024,winter wheat,Chevignon,9.7,2023-10-15,2024-08-12,crop_registration_basic_ZW05.xlsx
+ZW05_04_2025,ZW05,ZW05_04,2025,sugar beet,Leontina,124,2025-03-19,2025-11-27,crop_registration_basic_ZW05.xlsx
+ZW06_01_2023,ZW06,ZW06_01,2023,winter wheat,ultim,8.5,2022-10-04,2023-07-08,crop_registration_basic_ZW06.xlsx
+ZW06_01_2024,ZW06,ZW06_01,2024,ware potato,Folva,50.193,2024-03-21,2024-08-27,crop_registration_basic_ZW06.xlsx
+ZW06_01_2025,ZW06,ZW06_01,2025,winter wheat,Geluck,11,2024-10-04,2025-07-17,crop_registration_basic_ZW06.xlsx
+ZW06_02_2023,ZW06,ZW06_02,2023,sugar beet,,75,2023-03-02,2023-09-15,crop_registration_basic_ZW06.xlsx
+ZW06_02_2024,ZW06,ZW06_02,2024,winter wheat,addiction su,7,2023-10-18,2024-07-20,crop_registration_basic_ZW06.xlsx
+ZW06_02_2025,ZW06,ZW06_02,2025,winter wheat,Ultim,10,2024-10-03,2025-07-10,crop_registration_basic_ZW06.xlsx
+ZW06_03_2023,ZW06,ZW06_03,2023,winter wheat,geluck,9,2022-10-04,2023-07-19,crop_registration_basic_ZW06.xlsx
+ZW06_03_2024,ZW06,ZW06_03,2024,winter wheat,ultim,7,2023-10-16,2024-07-20,crop_registration_basic_ZW06.xlsx
+ZW06_03_2025,ZW06,ZW06_03,2025,ware potato,Folva,44.64,2025-03-13,2025-09-05,crop_registration_basic_ZW06.xlsx
+ZW06_04_2023,ZW06,ZW06_04,2023,sugar beet,,75,2023-03-02,2023-09-15,crop_registration_basic_ZW06.xlsx
+ZW06_04_2024,ZW06,ZW06_04,2024,winter barley,,7,2023-09-28,2024-06-28,crop_registration_basic_ZW06.xlsx
+ZW06_04_2025,ZW06,ZW06_04,2025,onion sets,Panther,25,2024-08-31,2025-06-14,crop_registration_basic_ZW06.xlsx
+ZW06_05_2023,ZW06,ZW06_05,2023,ware potato,folva,50,2023-03-04,2023-09-14,crop_registration_basic_ZW06.xlsx
+ZW06_05_2024,ZW06,ZW06_05,2024,winter wheat,geluck,7,2023-10-18,2024-08-01,crop_registration_basic_ZW06.xlsx
+ZW06_05_2025,ZW06,ZW06_05,2025,sugar beet,,80,2025-03-05,2025-09-11,crop_registration_basic_ZW06.xlsx
+ZW07_01_2023,ZW07,ZW07_01,2023,ware potato,Melody,55,2023-05-04,2023-10-07,crop_registration_basic_ZW07.xlsx
+ZW07_01_2024,ZW07,ZW07_01,2024,sugar beet,BTS 3715 N,85,2024-04-13,2024-10-28,crop_registration_basic_ZW07.xlsx
+ZW07_01_2025,ZW07,ZW07_01,2025,winter wheat,Chevignon,10.6,2024-11-18,2025-07-15,crop_registration_basic_ZW07.xlsx
+ZW07_02_2023,ZW07,ZW07_02,2023,winter wheat,Keitum,11.086,2022-11-07,2023-07-20,crop_registration_basic_ZW07.xlsx
+ZW07_02_2024,ZW07,ZW07_02,2024,seed onion,Dormo,30,2024-05-11,2024-09-20,crop_registration_basic_ZW07.xlsx
+ZW07_02_2025,ZW07,ZW07_02,2025,ware potato,Agria,60,2025-04-11,2025-10-04,crop_registration_basic_ZW07.xlsx
+ZW07_03_2023,ZW07,ZW07_03,2023,ware potato,Agria,,2023-05-22,,crop_registration_basic_ZW07.xlsx
+ZW07_03_2024,ZW07,ZW07_03,2024,spring wheat,Quintus,8.392,2024-03-20,2024-08-02,crop_registration_basic_ZW07.xlsx
+ZW07_03_2025,ZW07,ZW07_03,2025,silage maize,,46.7,,,crop_registration_basic_ZW07.xlsx
+ZW07_04_2023,ZW07,ZW07_04,2023,ware potato,Agria,50,2023-05-15,2023-10-05,crop_registration_basic_ZW07.xlsx
+ZW07_04_2024,ZW07,ZW07_04,2024,spring wheat,hexham,10,2024-01-20,2024-07-30,crop_registration_basic_ZW07.xlsx
+ZW07_04_2025,ZW07,ZW07_04,2025,seed onion,Romy,70,2025-03-26,2025-08-29,crop_registration_basic_ZW07.xlsx
+ZW08_01_2023,ZW08,ZW08_01,2023,winter wheat,Extase KWS,9.79,2022-11-03,2023-07-21,crop_registration_basic_ZW08.xlsx
+ZW08_01_2024,ZW08,ZW08_01,2024,ware potato,Meera,45,2024-05-11,2024-10-09,crop_registration_basic_ZW08.xlsx
+ZW08_01_2025,ZW08,ZW08_01,2025,winter wheat,Addiction SU,11.35833,2024-10-17,2025-07-12,crop_registration_basic_ZW08.xlsx
+ZW08_02_2023,ZW08,ZW08_02,2023,common bean,Amigo,19.2,2023-06-07,2023-09-06,crop_registration_basic_ZW08.xlsx
+ZW08_02_2024,ZW08,ZW08_02,2024,winter wheat,Chevignon,7.69877,2023-11-24,2024-07-31,crop_registration_basic_ZW08.xlsx
+ZW08_02_2025,ZW08,ZW08_02,2025,ware potato,Hermes,55,2025-03-28,2025-09-15,crop_registration_basic_ZW08.xlsx
+ZW08_03_2023,ZW08,ZW08_03,2023,ware potato,Lady alicia,50,2023-05-22,2023-10-07,crop_registration_basic_ZW08.xlsx
+ZW08_03_2024,ZW08,ZW08_03,2024,winter wheat,Extase KWS,8.76167,2023-12-06,2024-08-03,crop_registration_basic_ZW08.xlsx
+ZW08_03_2025,ZW08,ZW08_03,2025,sugar beet,BTS 2620,87.96892,2025-04-10,2025-09-30,crop_registration_basic_ZW08.xlsx
+ZW08_04_2023,ZW08,ZW08_04,2023,ware potato,Lady alicia,50,2023-05-22,2023-10-07,crop_registration_basic_ZW08.xlsx
+ZW08_04_2024,ZW08,ZW08_04,2024,winter wheat,Extase KWS,8.76167,2023-12-06,2024-08-03,crop_registration_basic_ZW08.xlsx
+ZW08_04_2025,ZW08,ZW08_04,2025,sugar beet,BTS 2620,87.96892,2025-04-10,2025-09-30,crop_registration_basic_ZW08.xlsx
+ZW09_01_2023,ZW09,ZW09_01,2023,winter barley,LG Zebra,12.3,2022-10-03,2023-06-27,crop_registration_basic_ZW09.xlsx
+ZW09_01_2024,ZW09,ZW09_01,2024,ware potato,Agria,58,2024-04-30,2024-09-25,crop_registration_basic_ZW09.xlsx
+ZW09_01_2025,ZW09,ZW09_01,2025,winter wheat,Chevignon,12,2024-10-19,2025-07-12,crop_registration_basic_ZW09.xlsx
+ZW09_02_2023,ZW09,ZW09_02,2023,seed onion,Rockito,45,2023-04-19,2023-09-12,crop_registration_basic_ZW09.xlsx
+ZW09_02_2024,ZW09,ZW09_02,2024,broad bean,Duet,5,2024-06-05,2024-08-19,crop_registration_basic_ZW09.xlsx
+ZW09_02_2025,ZW09,ZW09_02,2025,ware potato,Fontane,55,2025-03-26,2025-10-10,crop_registration_basic_ZW09.xlsx
+ZW09_03_2023,ZW09,ZW09_03,2023,ware potato,Fontane,55,2023-05-17,2023-10-17,crop_registration_basic_ZW09.xlsx
+ZW09_03_2024,ZW09,ZW09_03,2024,winter wheat,Calgary,7.2,2023-10-18,2024-08-02,crop_registration_basic_ZW09.xlsx
+ZW09_03_2025,ZW09,ZW09_03,2025,sugar beet,Leontina KWS,109,2025-03-20,2025-10-29,crop_registration_basic_ZW09.xlsx
+ZW09_04_2023,ZW09,ZW09_04,2023,winter wheat,Calgary,9.925,2022-10-05,2023-07-26,crop_registration_basic_ZW09.xlsx
+ZW09_04_2024,ZW09,ZW09_04,2024,sugar beet,Leontina KWS,103,2024-03-21,2024-11-05,crop_registration_basic_ZW09.xlsx
+ZW09_04_2025,ZW09,ZW09_04,2025,winter wheat,Calgary,10.33,2024-11-07,2025-07-30,crop_registration_basic_ZW09.xlsx
+ZW10_01_2023,ZW10,ZW10_01,2023,common bean,Poseidon,22.89,2023-06-02,2023-08-18,crop_registration_basic_ZW10.xlsx
+ZW10_01_2024,ZW10,ZW10_01,2024,sugar beet,Edonia KWS,80,2024-04-13,2024-09-20,crop_registration_basic_ZW10.xlsx
+ZW10_01_2025,ZW10,ZW10_01,2025,winter wheat,Calgary,11.214,2024-10-02,2025-07-04,crop_registration_basic_ZW10.xlsx
+ZW10_02_2023,ZW10,ZW10_02,2023,sugar beet,Caprianna KWS,100,2023-04-18,2023-10-01,crop_registration_basic_ZW10.xlsx
+ZW10_02_2024,ZW10,ZW10_02,2024,winter wheat,Addiction,7.9651163,2023-10-01,2024-07-19,crop_registration_basic_ZW10.xlsx
+ZW10_02_2025,ZW10,ZW10_02,2025,ware potato,Melody,72,2025-04-02,2025-08-29,crop_registration_basic_ZW10.xlsx
+ZW10_03_2023,ZW10,ZW10_03,2023,ware potato,Melody,54,2023-05-01,2023-09-29,crop_registration_basic_ZW10.xlsx
+ZW10_03_2024,ZW10,ZW10_03,2024,common bean,Poseidon,14.283,2024-06-08,2024-08-22,crop_registration_basic_ZW10.xlsx
+ZW10_03_2025,ZW10,ZW10_03,2025,sugar beet,Leontina KWS,111,2025-03-18,2025-09-08,crop_registration_basic_ZW10.xlsx
+ZW11_01_2023,ZW11,ZW11_01,2023,winter wheat,Calgary ,8.56068,2022-10-16,2023-07-20,crop_registration_basic_ZW11.xlsx
+ZW11_01_2024,ZW11,ZW11_01,2024,ware potato,Innovator,35,2024-06-13,2024-10-18,crop_registration_basic_ZW11.xlsx
+ZW11_01_2025,ZW11,ZW11_01,2025,winter wheat,Chevignon,10.812,2024-10-19,2025-07-12,crop_registration_basic_ZW11.xlsx
+ZW11_02_2023,ZW11,ZW11_02,2023,seed onion,vento,43.11399,2023-05-03,2023-09-28,crop_registration_basic_ZW11.xlsx
+ZW11_02_2024,ZW11,ZW11_02,2024,common bean,mustang,14.32143,2024-07-05,2024-09-10,crop_registration_basic_ZW11.xlsx
+ZW11_02_2025,ZW11,ZW11_02,2025,ware potato,Edison,60,2025-04-09,2025-09-16,crop_registration_basic_ZW11.xlsx
+ZW11_03_2023,ZW11,ZW11_03,2023,tulip,,,,,crop_registration_basic_ZW11.xlsx
+ZW11_03_2024,ZW11,ZW11_03,2024,common bean,mustang,16.27179,2024-07-05,2024-09-09,crop_registration_basic_ZW11.xlsx
+ZW11_03_2025,ZW11,ZW11_03,2025,sugar beet,Leontina KWS,121,2025-03-20,2025-10-19,crop_registration_basic_ZW11.xlsx
+ZW11_04_2023,ZW11,ZW11_04,2023,ware potato,Innovator,30.52429,2023-05-19,2023-09-26,crop_registration_basic_ZW11.xlsx
+ZW11_04_2024,ZW11,ZW11_04,2024,spring wheat,Duncan WPB,7.59596,2024-03-21,2024-08-11,crop_registration_basic_ZW11.xlsx
+ZW11_04_2025,ZW11,ZW11_04,2025,seed onion,Viggo,46.5142,2025-04-12,2025-09-04,crop_registration_basic_ZW11.xlsx
+ZW12_01_2023,ZW12,ZW12_01,2023,,,,,,crop_registration_basic_ZW12.xlsx
+ZW12_01_2024,ZW12,ZW12_01,2024,,,,,,crop_registration_basic_ZW12.xlsx
+ZW12_01_2025,ZW12,ZW12_01,2025,,,,,,crop_registration_basic_ZW12.xlsx
+ZW12_02_2023,ZW12,ZW12_02,2023,common bean,Stanley,12,2023-05-26,2023-08-01,crop_registration_basic_ZW12.xlsx
+ZW12_02_2024,ZW12,ZW12_02,2024,ware potato,Erika,40,2024-04-13,2024-08-08,crop_registration_basic_ZW12.xlsx
+ZW12_02_2025,ZW12,ZW12_02,2025,sugar beet,,,,,crop_registration_basic_ZW12.xlsx
+ZW12_03_2023,ZW12,ZW12_03,2023,sugar beet,Annemartha KWS,106,2023-04-22,2023-09-06,crop_registration_basic_ZW12.xlsx
+ZW12_03_2024,ZW12,ZW12_03,2024,winter wheat,Skyscraper LG,6,2023-10-09,2024-07-19,crop_registration_basic_ZW12.xlsx
+ZW12_03_2025,ZW12,ZW12_03,2025,ware potato,Musica,50,2025-03-07,2025-07-04,crop_registration_basic_ZW12.xlsx
+ZW12_04_2023,ZW12,ZW12_04,2023,ware potato,Erika,45,2023-04-21,2023-08-29,crop_registration_basic_ZW12.xlsx
+ZW12_04_2024,ZW12,ZW12_04,2024,winter wheat,,9.5,,,crop_registration_basic_ZW12.xlsx
+ZW12_04_2025,ZW12,ZW12_04,2025,seed onion,Hyfive,65,2025-03-26,2025-08-25,crop_registration_basic_ZW12.xlsx
+ZW13_01_2023,ZW13,ZW13_01,2023,,,,,,crop_registration_basic_ZW13.xlsx
+ZW13_01_2024,ZW13,ZW13_01,2024,seed onion,Hybing,57,2024-04-15,2024-08-15,crop_registration_basic_ZW13.xlsx
+ZW13_01_2025,ZW13,ZW13_01,2025,ware potato,Frieslander,30,2025-03-10,2025-07-18,crop_registration_basic_ZW13.xlsx
+ZW13_02_2023,ZW13,ZW13_02,2023,,,,,,crop_registration_basic_ZW13.xlsx
+ZW13_02_2024,ZW13,ZW13_02,2024,sugar beet,Corvinia,85,2024-05-11,2024-10-15,crop_registration_basic_ZW13.xlsx
+ZW13_02_2025,ZW13,ZW13_02,2025,ware potato,Frieslander,30,2025-03-17,2025-07-11,crop_registration_basic_ZW13.xlsx
+ZW13_03_2023,ZW13,ZW13_03,2023,,,,,,crop_registration_basic_ZW13.xlsx
+ZW13_03_2024,ZW13,ZW13_03,2024,ware potato,Jazzy,42,2024-05-20,2024-09-30,crop_registration_basic_ZW13.xlsx
+ZW13_03_2025,ZW13,ZW13_03,2025,sugar beet,Corvinia,,2025-03-20,2025-10-22,crop_registration_basic_ZW13.xlsx
+ZW14_01_2023,ZW14,ZW14_01,2023,sugar beet,Caprianna KWS,,2023-05-02,2023-12-06,crop_registration_basic_ZW14.xlsx
+ZW14_01_2024,ZW14,ZW14_01,2024,winter wheat,Calgary,,2023-12-06,2024-10-18,crop_registration_basic_ZW14.xlsx
+ZW14_01_2025,ZW14,ZW14_01,2025,ware potato,Innovator,27,2025-04-12,2025-07-16,crop_registration_basic_ZW14.xlsx
+ZW14_02_2023,ZW14,ZW14_02,2023,ware potato,Melody,,2023-05-30,2023-10-22,crop_registration_basic_ZW14.xlsx
+ZW14_02_2024,ZW14,ZW14_02,2024,silage maize,,,,,crop_registration_basic_ZW14.xlsx
+ZW14_02_2025,ZW14,ZW14_02,2025,winter wheat,Calgary,10,2024-11-19,2025-07-21,crop_registration_basic_ZW14.xlsx
+ZW14_03_2023,ZW14,ZW14_03,2023,carrot,barcelona,,2023-05-28,2023-10-07,crop_registration_basic_ZW14.xlsx
+ZW14_03_2024,ZW14,ZW14_03,2024,ware potato,Melody,,2024-06-17,2024-10-18,crop_registration_basic_ZW14.xlsx
+ZW14_03_2025,ZW14,ZW14_03,2025,sugar beet,Leontinna,80,2025-03-20,2025-09-26,crop_registration_basic_ZW14.xlsx
+ZW15_01_2023,ZW15,ZW15_01,2023,ware potato,Fontane,52,2023-05-01,2023-10-06,crop_registration_basic_ZW15.xlsx
+ZW15_01_2024,ZW15,ZW15_01,2024,sugar beet,Leontina KWS,102,2024-04-12,2024-11-15,crop_registration_basic_ZW15.xlsx
+ZW15_01_2025,ZW15,ZW15_01,2025,winter wheat,Chevignon,11.4,2024-11-16,2025-07-07,crop_registration_basic_ZW15.xlsx
+ZW15_02_2023,ZW15,ZW15_02,2023,tulip,,,,,crop_registration_basic_ZW15.xlsx
+ZW15_02_2024,ZW15,ZW15_02,2024,winter wheat,Chevignon,6,2023-10-07,2024-07-20,crop_registration_basic_ZW15.xlsx
+ZW15_02_2025,ZW15,ZW15_02,2025,ware potato,Melody,64,2025-04-10,2025-09-26,crop_registration_basic_ZW15.xlsx
+ZW15_03_2023,ZW15,ZW15_03,2023,winter wheat,calgary,9,2022-10-16,2023-07-26,crop_registration_basic_ZW15.xlsx
+ZW15_03_2024,ZW15,ZW15_03,2024,tulip,,,,,crop_registration_basic_ZW15.xlsx
+ZW15_03_2025,ZW15,ZW15_03,2025,sugar beet,Leontina KWS,120,2025-03-19,2025-09-18,crop_registration_basic_ZW15.xlsx
+ZW16_01_2023,ZW16,ZW16_01,2023,sugar beet,Leontina KWS,80,2023-04-19,2023-09-19,crop_registration_basic_ZW16.xlsx
+ZW16_01_2024,ZW16,ZW16_01,2024,ware potato,Innovator,45,2024-05-03,2024-10-04,crop_registration_basic_ZW16.xlsx
+ZW16_01_2025,ZW16,ZW16_01,2025,winter wheat,Chevignon,9.5,2024-10-15,2025-07-28,crop_registration_basic_ZW16.xlsx
+ZW16_02_2023,ZW16,ZW16_02,2023,sugar beet,Fadela KWS,106,2023-04-19,2023-11-06,crop_registration_basic_ZW16.xlsx
+ZW16_02_2024,ZW16,ZW16_02,2024,winter wheat,Addiction SU,9.6,2023-10-23,2024-07-24,crop_registration_basic_ZW16.xlsx
+ZW16_02_2025,ZW16,ZW16_02,2025,ware potato,Innovator,50,2025-04-10,2025-09-25,crop_registration_basic_ZW16.xlsx
+ZW16_03_2023,ZW16,ZW16_03,2023,grass,BG 11 mengsel,,,,crop_registration_basic_ZW16.xlsx
+ZW16_03_2024,ZW16,ZW16_03,2024,grass,BG 11 mengsel,,,,crop_registration_basic_ZW16.xlsx
+ZW16_03_2025,ZW16,ZW16_03,2025,sugar beet,Mertha KWS,125,2025-03-18,2025-11-15,crop_registration_basic_ZW16.xlsx
+ZW16_04_2023,ZW16,ZW16_04,2023,ware potato,Première,30,2023-04-21,2023-08-02,crop_registration_basic_ZW16.xlsx
+ZW16_04_2024,ZW16,ZW16_04,2024,winter wheat,Talent KWS,7.6,2023-12-04,2024-07-25,crop_registration_basic_ZW16.xlsx
+ZW16_04_2025,ZW16,ZW16_04,2025,seed onion,Prospero,70,2025-03-13,2025-08-26,crop_registration_basic_ZW16.xlsx
+ZW17_01_2023,ZW17,ZW17_01,2023,winter wheat,Extase KWS,8.8,2022-10-20,2023-07-17,crop_registration_basic_ZW17.xlsx
+ZW17_01_2024,ZW17,ZW17_01,2024,ware potato,Corazon,65,2024-05-14,2024-09-21,crop_registration_basic_ZW17.xlsx
+ZW17_01_2025,ZW17,ZW17_01,2025,winter wheat,Champion,12.381435,2024-10-21,2025-07-17,crop_registration_basic_ZW17.xlsx
+ZW17_02_2023,ZW17,ZW17_02,2023,sugar beet,Yukon,100,2023-05-02,2023-11-07,crop_registration_basic_ZW17.xlsx
+ZW17_02_2024,ZW17,ZW17_02,2024,broad bean,Duet,5,2024-05-08,2024-07-30,crop_registration_basic_ZW17.xlsx
+ZW17_02_2025,ZW17,ZW17_02,2025,ware potato,Ballerina,56.315,2025-04-02,2025-09-09,crop_registration_basic_ZW17.xlsx
+ZW17_03_2023,ZW17,ZW17_03,2023,ware potato,Ballerina,49.18033,2023-05-01,2023-09-13,crop_registration_basic_ZW17.xlsx
+ZW17_03_2024,ZW17,ZW17_03,2024,winter wheat,Calgary,5.5,2023-10-07,2024-07-30,crop_registration_basic_ZW17.xlsx
+ZW17_03_2025,ZW17,ZW17_03,2025,spring wheat,Servus,6.5,2025-03-07,2025-07-26,crop_registration_basic_ZW17.xlsx
+ZW17_04_2023,ZW17,ZW17_04,2023,ware potato,Agria,45,2023-05-03,2023-10-02,crop_registration_basic_ZW17.xlsx
+ZW17_04_2024,ZW17,ZW17_04,2024,winter wheat,Addiction SU,5.39,2023-10-06,2024-07-20,crop_registration_basic_ZW17.xlsx
+ZW17_04_2025,ZW17,ZW17_04,2025,sugar beet,Baltimore,91.996,2025-03-14,2025-09-18,crop_registration_basic_ZW17.xlsx
+ZW18_01_2023,ZW18,ZW18_01,2023,peas,Herriau,4,2023-06-01,2023-08-11,crop_registration_basic_ZW18.xlsx
+ZW18_01_2024,ZW18,ZW18_01,2024,ware potato,agria,50,2024-05-10,2024-10-12,crop_registration_basic_ZW18.xlsx
+ZW18_01_2025,ZW18,ZW18_01,2025,winter wheat,addiction SU,11,2024-10-09,2025-07-12,crop_registration_basic_ZW18.xlsx
+ZW18_02_2023,ZW18,ZW18_02,2023,sugar beet,,100,2023-04-19,2023-11-23,crop_registration_basic_ZW18.xlsx
+ZW18_02_2024,ZW18,ZW18_02,2024,winter wheat,Chevignon,7,2023-11-23,2024-07-20,crop_registration_basic_ZW18.xlsx
+ZW18_02_2025,ZW18,ZW18_02,2025,ware potato,agria,65,2025-04-08,2025-09-25,crop_registration_basic_ZW18.xlsx
+ZW18_03_2023,ZW18,ZW18_03,2023,ware potato,agria,55,2023-05-04,2023-10-07,crop_registration_basic_ZW18.xlsx
+ZW18_03_2024,ZW18,ZW18_03,2024,winter wheat,Extase KWS,7,2023-10-09,2024-07-20,crop_registration_basic_ZW18.xlsx
+ZW18_03_2025,ZW18,ZW18_03,2025,seed onion,Romy,50,2025-04-03,2025-09-06,crop_registration_basic_ZW18.xlsx
+ZW18_04_2023,ZW18,ZW18_04,2023,ware potato,agria,55,2023-05-04,2023-10-09,crop_registration_basic_ZW18.xlsx
+ZW18_04_2024,ZW18,ZW18_04,2024,winter wheat,Extase KWS,7,2023-10-10,2024-07-20,crop_registration_basic_ZW18.xlsx
+ZW18_04_2025,ZW18,ZW18_04,2025,sugar beet,Leontina KWS,103,2025-03-21,2025-10-06,crop_registration_basic_ZW18.xlsx
+ZW19_01_2023,ZW19,ZW19_01,2023,ware potato,Markies,53,2023-04-30,2023-11-24,crop_registration_basic_ZW19.xlsx
+ZW19_01_2024,ZW19,ZW19_01,2024,grass,Duet klavermengsel,,2024-04-08,,crop_registration_basic_ZW19.xlsx
+ZW19_01_2025,ZW19,ZW19_01,2025,sugar beet,Leontina KWS,103.161,2025-03-18,2025-09-16,crop_registration_basic_ZW19.xlsx
+ZW19_02_2023,ZW19,ZW19_02,2023,onion sets,Sturon,65,2023-03-05,2023-08-03,crop_registration_basic_ZW19.xlsx
+ZW19_02_2024,ZW19,ZW19_02,2024,peas,Lambado,8,2024-04-30,2024-07-12,crop_registration_basic_ZW19.xlsx
+ZW19_02_2025,ZW19,ZW19_02,2025,ware potato,Markies,,2025-03-28,,crop_registration_basic_ZW19.xlsx
+ZW19_03_2023,ZW19,ZW19_03,2023,peas,Lambado,8,2023-05-02,2023-07-03,crop_registration_basic_ZW19.xlsx
+ZW19_03_2024,ZW19,ZW19_03,2024,ware potato,Markies,55,2024-04-13,2024-10-04,crop_registration_basic_ZW19.xlsx
+ZW19_03_2025,ZW19,ZW19_03,2025,winter wheat,Addiction SU,12.013722,2024-10-17,2025-07-12,crop_registration_basic_ZW19.xlsx
+ZW20_01_2023,ZW20,ZW20_01,2023,ware potato,Agria,60,2023-04-30,2023-10-05,crop_registration_basic_ZW20.xlsx
+ZW20_01_2024,ZW20,ZW20_01,2024,common bean,Modesto,14,2024-06-06,2024-08-17,crop_registration_basic_ZW20.xlsx
+ZW20_01_2025,ZW20,ZW20_01,2025,seed onion,Hyfive,80,2025-03-25,2025-08-21,crop_registration_basic_ZW20.xlsx
+ZW20_02_2023,ZW20,ZW20_02,2023,common bean,Modesto,21.35,2023-05-26,2023-08-08,crop_registration_basic_ZW20.xlsx
+ZW20_02_2024,ZW20,ZW20_02,2024,seed onion,Motion,60,2024-05-10,2024-09-17,crop_registration_basic_ZW20.xlsx
+ZW20_02_2025,ZW20,ZW20_02,2025,ware potato,Sylvana,60,2025-03-19,2025-09-01,crop_registration_basic_ZW20.xlsx
+ZW20_03_2023,ZW20,ZW20_03,2023,ware potato,Folva,60,2023-04-28,2023-10-01,crop_registration_basic_ZW20.xlsx
+ZW20_03_2024,ZW20,ZW20_03,2024,grass seed,coletta,2.4,,2024-07-24,crop_registration_basic_ZW20.xlsx
+ZW20_03_2025,ZW20,ZW20_03,2025,sugar beet,Leontina KWS,120,2025-03-17,2025-12-04,crop_registration_basic_ZW20.xlsx
+ZW21_01_2023,ZW21,ZW21_01,2023,winter wheat,Extase KWS,10.7,2022-10-12,2023-07-22,crop_registration_basic_ZW21.xlsx
+ZW21_01_2024,ZW21,ZW21_01,2024,belgian endive,Topscore,20.4,2024-06-07,2024-11-01,crop_registration_basic_ZW21.xlsx
+ZW21_01_2025,ZW21,ZW21_01,2025,winter wheat ,Chevignon,9.96,2024-11-04,2025-07-11,crop_registration_basic_ZW21.xlsx
+ZW21_02_2023,ZW21,ZW21_02,2023,winter wheat,Chevignon,11.2,2022-10-12,2023-07-21,crop_registration_basic_ZW21.xlsx
+ZW21_02_2024,ZW21,ZW21_02,2024,seed onion,Rockito,51,2024-04-30,2024-09-05,crop_registration_basic_ZW21.xlsx
+ZW21_02_2025,ZW21,ZW21_02,2025,winter barley,Zebra LG,12.1,2024-10-08,2025-06-30,crop_registration_basic_ZW21.xlsx
+ZW21_03_2023,ZW21,ZW21_03,2023,winter wheat,Chevignon,9.7,2022-10-06,2023-07-13,crop_registration_basic_ZW21.xlsx
+ZW21_03_2024,ZW21,ZW21_03,2024,ware potato,Agria,53,2024-05-13,2024-10-07,crop_registration_basic_ZW21.xlsx
+ZW21_03_2025,ZW21,ZW21_03,2025,winter wheat,Lamant WPB,10.2,2024-10-12,2025-07-18,crop_registration_basic_ZW21.xlsx
+ZW21_04_2023,ZW21,ZW21_04,2023,ware potato,Chenoa,48.2,2023-05-01,2023-10-09,crop_registration_basic_ZW21.xlsx
+ZW21_04_2024,ZW21,ZW21_04,2024,winter wheat,Chevignon,8.5,2023-12-17,2024-07-30,crop_registration_basic_ZW21.xlsx
+ZW21_04_2025,ZW21,ZW21_04,2025,belgian endive,Topscore,19.9,2025-05-30,2025-11-10,crop_registration_basic_ZW21.xlsx
+ZW22_01_2023,ZW22,ZW22_01,2023,silage maize ,,,,,crop_registration_basic_ZW22.xlsx
+ZW22_01_2024,ZW22,ZW22_01,2024,faba bean,,7,2024-03-20,2024-08-28,crop_registration_basic_ZW22.xlsx
+ZW22_01_2025,ZW22,ZW22_01,2025,winter wheat,Chevignon,11.5,2024-10-04,2025-07-10,crop_registration_basic_ZW22.xlsx
+ZW22_02_2023,ZW22,ZW22_02,2023,ware potato,Innovator,62,2023-05-02,2023-09-30,crop_registration_basic_ZW22.xlsx
+ZW22_02_2024,ZW22,ZW22_02,2024,winter wheat,Chevignon,7.5,2023-10-10,2024-07-17,crop_registration_basic_ZW22.xlsx
+ZW22_02_2025,ZW22,ZW22_02,2025,faba bean,,7.5,2025-03-10,2025-08-15,crop_registration_basic_ZW22.xlsx
+ZW22_03_2023,ZW22,ZW22_03,2023,ware potato,Milva,77,2023-05-01,2023-09-27,crop_registration_basic_ZW22.xlsx
+ZW22_03_2024,ZW22,ZW22_03,2024,winter wheat,calgary,7.5,2023-10-06,2024-07-17,crop_registration_basic_ZW22.xlsx
+ZW22_03_2025,ZW22,ZW22_03,2025,carrot,Nerac,95,2025-04-14,2025-09-29,crop_registration_basic_ZW22.xlsx

@@ -6,8 +6,10 @@ from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider
 from pcse.models import Wofost81_PP
 import yaml
 
-latitude = 51.98
-longitude = 5.66
+
+
+latitude = 52.64
+longitude = 6.32
 
 cwd = Path.cwd()
 input_dir = cwd / "input"
@@ -15,6 +17,9 @@ agro_fp = input_dir / "9_Wofost81_PP_agro.yaml"
 soil_fp = input_dir / "9_Wofost81_PP_soil.yaml"
 site_fp = input_dir / "9_Wofost81_PP_site.yaml"
 weather_fp = input_dir / "9_weather.csv"
+
+from pcse.input import CSVWeatherDataProvider
+weather_data = CSVWeatherDataProvider(weather_fp)
 
 output_dir = cwd / "output"
 fig_fp = output_dir / "output_sim_griddedweather.jpeg"
@@ -29,7 +34,8 @@ with open(site_fp, "r") as f:
     site_dict = yaml.safe_load(f.read())
 
 crop_dict = YAMLCropDataProvider(Wofost81_PP)
-weather_data = NASAPowerWeatherDataProvider(latitude, longitude)
+weather_data = NASAPowerWeatherDataProvider(latitude,
+                                            longitude)
 parameters = ParameterProvider(sitedata=site_dict, soildata=soil_dict, cropdata=crop_dict)
 wofost = Wofost81_PP(parameters, weather_data, agro_dict)
 

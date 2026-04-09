@@ -1,0 +1,39 @@
+AgroManagement:
+- &id001 2023-05-03:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-09-28
+      crop_end_type: harvest
+      crop_name: seed_onion
+      variety_name: onion_agriadapt
+      max_duration: 365
+    StateEvents:
+    - &id003
+      event_signal: irrigate
+      event_state: SM
+      zero_condition: falling
+      name: Soil moisture driven irrigation scheduling
+      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+      events_table:
+      - 0.19172695124644243:
+          amount: 2.0
+          efficiency: 0.8
+    TimedEvents: {}
+- &id002 2025-04-09:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: &id004 2025-09-16
+      crop_end_type: harvest
+      crop_name: potato
+      variety_name: Potato_701
+      max_duration: 365
+    StateEvents:
+    - *id003
+    TimedEvents: {}
+- *id004:
+    CropCalendar: null
+    StateEvents: null
+    TimedEvents: null
+Version: '1.0'

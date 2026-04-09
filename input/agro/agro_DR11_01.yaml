@@ -1,0 +1,24 @@
+AgroManagement:
+- &id001 2023-04-21:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-10-14
+      crop_end_type: harvest
+      crop_name: potato
+      variety_name: Potato_701
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+- &id002 2025-04-09:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: 2025-10-10
+      crop_end_type: harvest
+      crop_name: potato
+      variety_name: Potato_701
+      max_duration: 365
+    StateEvents: null
+    TimedEvents: {}
+Version: '1.0'

@@ -1,0 +1,39 @@
+AgroManagement:
+- &id001 2023-05-01:
+    CropCalendar:
+      crop_start_date: *id001
+      crop_start_type: sowing
+      crop_end_date: 2023-09-27
+      crop_end_type: harvest
+      crop_name: potato
+      variety_name: Potato_701
+      max_duration: 365
+    StateEvents:
+    - &id003
+      event_signal: irrigate
+      event_state: SM
+      zero_condition: falling
+      name: Soil moisture driven irrigation scheduling
+      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+      events_table:
+      - 0.13554828234816366:
+          amount: 2.0
+          efficiency: 0.8
+    TimedEvents: {}
+- &id002 2023-10-06:
+    CropCalendar:
+      crop_start_date: *id002
+      crop_start_type: sowing
+      crop_end_date: &id004 2024-07-17
+      crop_end_type: harvest
+      crop_name: wheat
+      variety_name: Winter_wheat_101
+      max_duration: 365
+    StateEvents:
+    - *id003
+    TimedEvents: {}
+- *id004:
+    CropCalendar: null
+    StateEvents: null
+    TimedEvents: null
+Version: '1.0'
