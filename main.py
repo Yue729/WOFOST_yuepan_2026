@@ -10,7 +10,7 @@ from types import SimpleNamespace
 from pathlib import Path
 from pcse.base import ParameterProvider
 from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider
-from pcse.models import Wofost81_PP
+from pcse.models import Wofost73_PP
 from pcse.models import Wofost72_WLP_FD
 from datetime import datetime
 
@@ -445,7 +445,7 @@ def map_crop_name(crop_name: str) -> Optional[CropType]:
 
 
 
-def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost81_PP):
+def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost73_PP):
     """
     Run WOFOST model for a given field.
     
@@ -456,7 +456,7 @@ def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost81_P
     field_to_location_map : dict
         Dictionary mapping field IDs to coordinates
     model_class : class
-        The WOFOST model class to run (Wofost81_PP or Wofost72_WLP_FD)
+        The WOFOST model class to run (Wofost73_PP or Wofost72_WLP_FD)
         
     Returns:
     --------
@@ -491,48 +491,8 @@ def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost81_P
     wofost.run_till_terminate()
     output = wofost.get_output()
     df = pd.DataFrame(output)
-    
-    # Add crop names from agro file to the dataframe
-    # Extract crop names from AgroManagement campaigns
-    crop_names = []
-    if 'AgroManagement' in agro_dict:
-        for campaign in agro_dict['AgroManagement']:
-            for date_key, campaign_data in campaign.items():
-                if campaign_data and 'CropCalendar' in campaign_data and campaign_data['CropCalendar']:
-                    crop_names.append(campaign_data['CropCalendar'].get('crop_name', 'Unknown'))
-    
-    # Map crop names to rows based on TSUM progression (crop growth stage)
-    # For simplicity, add the first crop name to all rows
-    # In a more complex scenario, you'd map based on simulation date
-    if crop_names:
-        df['crop_name'] = crop_names[0]  # Default to first crop
-    else:
-        df['crop_name'] = 'Unknown'
-    
     return df
 
-
-def filter_results_to_harvest(df):
-    """
-    Filter results to keep only the final row (harvest date) per field_id and crop.
-    This gives you one row per crop per field showing the end-of-season results.
-    
-    Parameters:
-    -----------
-    df : pd.DataFrame
-        Combined results from multiple fields
-        
-    Returns:
-    --------
-    pd.DataFrame : Filtered results with one row per field per crop (at harvest)
-    """
-    # For each field_id, keep only the last row (which corresponds to harvest/end date)
-    if 'field_id' in df.columns:
-        filtered_df = df.groupby('field_id').tail(1).reset_index(drop=True)
-    else:
-        filtered_df = df.tail(1)
-    
-    return filtered_df
 
 
 def update_agro_variety_names():
@@ -583,9 +543,59 @@ def update_agro_variety_names():
     print("\nAll agro files updated!")
 
 
+def load_agro_data_of_field(field_id: str) -> dict:
+    """
+    Load agro management data for a specific field from its YAML file.
+    
+    Parameters:
+    -----------
+    field_id : str
+        The field identifier
+        
+    Returns:
+    --------
+    dict : Agro management data for the specified field
+    """
+    agro_file = Path(__file__).parent.joinpath(Path(f"input/agro/agro_{field_id}.yaml"))
+    
+    if not agro_file.exists():
+        raise FileNotFoundError(f"Agro file not found for field {field_id}: {agro_file}")
+    
+    with open(agro_file, "r") as f:
+        agro_data = yaml.safe_load(f)
+    
+    return agro_data
+
+def dump_model_results_to_excel(results_dict: dict, output_file: Path):
+    if not results_dict:
+        print(f"  Warning: No results to export to {output_file.name}. Skipping...")
+        return
+    
+    concat_81_rows = []
+    for field_id, df in results_dict.items():
+        agro_data = load_agro_data_of_field(field_id)
+        end_dates = {}
+        for year in agro_data["AgroManagement"]:
+            year_key = list(year.keys())[0]
+            year_data = year[year_key]
+            crop_calendar = year_data.get("CropCalendar")
+            if crop_calendar is not None:
+                end_dates[crop_calendar["crop_end_date"]] = crop_calendar["crop_name"]
+        end_date_rows = df[df["day"].isin(list(end_dates.keys()))]
+        end_date_rows["field_id"] = field_id
+        for end_date, crop_name in end_dates.items():
+            print(f"Mapping end date {end_date} to crop {crop_name} for field {field_id}")
+            end_date_rows[end_date_rows["day"] == end_date] = crop_name
+        concat_81_rows.append(end_date_rows)
+    
+    if concat_81_rows:
+        pd.concat(concat_81_rows, ignore_index=True).to_excel(output_file, index=False)
+        print(f"  ✓ Results saved to {output_file.name}")
+        
+
 def main():
 
-    crop_dict = YAMLCropDataProvider(Wofost81_PP)
+    crop_dict = YAMLCropDataProvider(Wofost73_PP)
 
     crops_varieties = crop_dict.get_crops_varieties()
     print("Sugarbeet varieties:", list(crops_varieties['sugarbeet']))
@@ -646,22 +656,21 @@ def main():
     output_excel_dir.mkdir(parents=True, exist_ok=True)
     
     # Initialize dataframes to collect results from all fields
-    wofost81_results = []
-    wofost_wlp_results = []
+    wofost81_results = {}
+    wofost_wlp_results = {}
     
     exceptions_81 = []
     exceptions_wlp = []
     
-    # Run WOFOST81_PP model
+    # Run WOFOST73_PP model
     print("\n" + "="*80)
-    print("RUNNING WOFOST81_PP MODEL")
+    print("RUNNING WOFOST73_PP MODEL")
     print("="*80)
     for field_id in fields_from_agro:
-        print(f"\nRunning WOFOST81_PP for field {field_id}...")
+        print(f"\nRunning WOFOST73_PP for field {field_id}...")
         try:
-            df = run_model(field_id, field_to_location, model_class=Wofost81_PP)
-            df['field_id'] = field_id
-            wofost81_results.append(df)
+            df = run_model(field_id, field_to_location, model_class=Wofost73_PP)
+            wofost81_results[field_id] = df
             print(f"  ✓ Completed for {field_id}")
         except Exception as e:
             print(f"  ✗ Error for field {field_id}: {e}")
@@ -675,8 +684,7 @@ def main():
         print(f"\nRunning Wofost72_WLP_FD for field {field_id}...")
         try:
             df = run_model(field_id, field_to_location, model_class=Wofost72_WLP_FD)
-            df['field_id'] = field_id
-            wofost_wlp_results.append(df)
+            wofost_wlp_results[field_id] = df
             print(f"  ✓ Completed for {field_id}")
         except Exception as e:
             print(f"  ✗ Error for field {field_id}: {e}")
@@ -686,36 +694,19 @@ def main():
     print("\n" + "="*80)
     print("SAVING RESULTS TO EXCEL")
     print("="*80)
+
     
-    if wofost81_results:
-        wofost81_combined = pd.concat(wofost81_results, ignore_index=True)
-        # Filter to keep only harvest/end date results per field
-        wofost81_filtered = filter_results_to_harvest(wofost81_combined)
-        wofost81_file = output_excel_dir / "WOFOST81_PP_results.xlsx"
-        wofost81_filtered.to_excel(wofost81_file, index=False)
-        print(f"\n✓ WOFOST81_PP results saved to: {wofost81_file}")
-        print(f"  Total rows: {len(wofost81_filtered)} (filtered to harvest dates)")
-        print(f"  Fields processed: {len(wofost81_results)}")
-    else:
-        print("\n✗ No WOFOST81_PP results to save")
-    
-    if wofost_wlp_results:
-        wofost_wlp_combined = pd.concat(wofost_wlp_results, ignore_index=True)
-        # Filter to keep only harvest/end date results per field
-        wofost_wlp_filtered = filter_results_to_harvest(wofost_wlp_combined)
-        wofost_wlp_file = output_excel_dir / "Wofost72_WLP_FD_results.xlsx"
-        wofost_wlp_filtered.to_excel(wofost_wlp_file, index=False)
-        print(f"\n✓ Wofost72_WLP_FD results saved to: {wofost_wlp_file}")
-        print(f"  Total rows: {len(wofost_wlp_filtered)} (filtered to harvest dates)")
-        print(f"  Fields processed: {len(wofost_wlp_results)}")
-    else:
-        print("\n✗ No Wofost72_WLP_FD results to save")
-    
+    dump_model_results_to_excel(wofost81_results, 
+                                output_excel_dir / "WOFOST73_PP_results.xlsx")
+
+    dump_model_results_to_excel(wofost_wlp_results, 
+                                output_excel_dir / "Wofost72_WLP_FD_results.xlsx")
+
     # Print summary
     print("\n" + "="*80)
     print("MODEL EXECUTION SUMMARY")
     print("="*80)
-    print(f"\nWOFOST81_PP:")
+    print(f"\nWOFOST73_PP:")
     print(f"  Successful runs: {len(wofost81_results)}")
     print(f"  Failed runs: {len(exceptions_81)}")
     if exceptions_81:
