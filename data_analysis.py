@@ -37,6 +37,7 @@ wlp_path = resolve_existing_path(
 yield_dir = RAW_DATA_PATH / "2_yield_data" / "yield_data_2025"
 out_path = RAW_DATA_PATH / "wofost_yield_merged_2025.xlsx"
 plot_dir = RAW_DATA_PATH / "2_yield_data" / "yield_plots_2025"
+excluded_fields = {"ZW19_02", "ZW12_01"}
 
 yield_files = {
     "sugarbeet": yield_dir / "yield_sugar_beet_2025.xlsx",
@@ -93,6 +94,7 @@ def prep_results(path, prefix):
         df.loc[mask, "year_key"] = df.loc[mask, "year"].astype(str).str.extract(r"(\d{4})", expand=False)
 
     df["field_key"] = df["field_id"].astype(str).str.strip()
+    df = df[~df["field_key"].isin(excluded_fields)].copy()
     df["crop_norm"] = df["crop_name"].map(normalize_crop)
 
     rename = {c: f"{prefix}_{c}" for c in df.columns if c not in ("year_key", "field_key")}
@@ -107,6 +109,7 @@ def prep_yield_sheet(path, sheet_name):
 
     df["year_key"] = pd.to_datetime(df["Measurement_date"], errors="coerce").dt.year.astype("Int64").astype(str)
     df["field_key"] = df[field_col].astype(str).str.strip()
+    df = df[~df["field_key"].isin(excluded_fields)].copy()
 
     if "Crop" in df.columns:
         df["yield_crop_norm"] = df["Crop"].map(normalize_crop)
