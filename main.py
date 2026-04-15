@@ -409,7 +409,8 @@ CROP_NAME_MAPPING = {
     # Barley
     'barley': CropType.BARLEY,
     'spring barley': CropType.BARLEY,
-    'winter barley': CropType.BARLEY,
+    'winter barley': CropType.WHEAT,
+    #map winter barley to wheat because we don't have a barley variety in the crop data provider, but we do have a wheat variety that can be used as a proxy for winter barley
     
     
     # Potato
@@ -428,7 +429,8 @@ CROP_NAME_MAPPING = {
     # Wheat
     'wheat': CropType.WHEAT,
     'winter wheat': CropType.WHEAT,
-    'spring wheat': CropType.WHEAT,
+    'spring wheat': CropType.BARLEY,
+    #map spring wheat to barley because we don't have a spring wheat variety in the crop data provider, but we do have a barley variety that can be used as a proxy for spring wheat
     
     # Seed Onion
     'seed onion': CropType.SEED_ONION,
@@ -581,11 +583,14 @@ def dump_model_results_to_excel(results_dict: dict, output_file: Path):
             crop_calendar = year_data.get("CropCalendar")
             if crop_calendar is not None:
                 end_dates[crop_calendar["crop_end_date"]] = crop_calendar["crop_name"]
-        end_date_rows = df[df["day"].isin(list(end_dates.keys()))]
+        end_date_rows = df[df["day"].isin(list(end_dates.keys()))].copy()
         end_date_rows["field_id"] = field_id
+        # Add crop_name column initialized as empty strings
+        end_date_rows["crop_name"] = ""
         for end_date, crop_name in end_dates.items():
             print(f"Mapping end date {end_date} to crop {crop_name} for field {field_id}")
-            end_date_rows[end_date_rows["day"] == end_date] = crop_name
+            mask = end_date_rows["day"] == end_date
+            end_date_rows.loc[mask, "crop_name"] = crop_name
         concat_81_rows.append(end_date_rows)
     
     if concat_81_rows:
@@ -656,10 +661,10 @@ def main():
     output_excel_dir.mkdir(parents=True, exist_ok=True)
     
     # Initialize dataframes to collect results from all fields
-    wofost81_results = {}
+    wofost73_pp_results = {}
     wofost_wlp_results = {}
     
-    exceptions_81 = []
+    exceptions_73_pp = []
     exceptions_wlp = []
     
     # Run WOFOST73_PP model
@@ -670,11 +675,11 @@ def main():
         print(f"\nRunning WOFOST73_PP for field {field_id}...")
         try:
             df = run_model(field_id, field_to_location, model_class=Wofost73_PP)
-            wofost81_results[field_id] = df
+            wofost73_pp_results[field_id] = df
             print(f"  ✓ Completed for {field_id}")
         except Exception as e:
             print(f"  ✗ Error for field {field_id}: {e}")
-            exceptions_81.append((field_id, str(e)))
+            exceptions_73_pp.append((field_id, str(e)))
     
     # Run Wofost72_WLP_FD model
     print("\n" + "="*80)
@@ -696,7 +701,7 @@ def main():
     print("="*80)
 
     
-    dump_model_results_to_excel(wofost81_results, 
+    dump_model_results_to_excel(wofost73_pp_results, 
                                 output_excel_dir / "WOFOST73_PP_results.xlsx")
 
     dump_model_results_to_excel(wofost_wlp_results, 
@@ -707,10 +712,10 @@ def main():
     print("MODEL EXECUTION SUMMARY")
     print("="*80)
     print(f"\nWOFOST73_PP:")
-    print(f"  Successful runs: {len(wofost81_results)}")
-    print(f"  Failed runs: {len(exceptions_81)}")
-    if exceptions_81:
-        print(f"  Failed fields: {[f[0] for f in exceptions_81]}")
+    print(f"  Successful runs: {len(wofost73_pp_results)}")
+    print(f"  Failed runs: {len(exceptions_73_pp)}")
+    if exceptions_73_pp:
+        print(f"  Failed fields: {[f[0] for f in exceptions_73_pp]}")
     
     print(f"\nWofost72_WLP_FD:")
     print(f"  Successful runs: {len(wofost_wlp_results)}")
