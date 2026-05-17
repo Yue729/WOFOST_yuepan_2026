@@ -1,35 +1,35 @@
 AgroManagement:
-- &id001 2023-04-22:
+- 2023-04-22:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2023-04-22
       crop_start_type: sowing
       crop_end_date: 2023-10-28
       crop_end_type: harvest
       crop_name: potato
-      variety_name: Potato_701
+      variety_name: Fontane
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
-- &id002 2024-05-01:
+- 2024-05-01:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2024-05-01
       crop_start_type: sowing
       crop_end_date: 2024-10-20
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
-- &id003 2025-04-02:
+- 2025-04-02:
     CropCalendar:
-      crop_start_date: *id003
+      crop_start_date: 2025-04-02
       crop_start_type: sowing
       crop_end_date: 2025-08-19
       crop_end_type: harvest
       crop_name: seed_onion
       variety_name: onion_agriadapt
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'

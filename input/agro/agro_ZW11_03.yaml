@@ -1,13 +1,13 @@
 AgroManagement:
-- &id001 2025-03-20:
+- 2025-03-20:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2025-03-20
       crop_start_type: sowing
       crop_end_date: 2025-10-19
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'

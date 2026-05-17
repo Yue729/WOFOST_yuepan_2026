@@ -1,51 +1,137 @@
 AgroManagement:
-- &id001 2023-04-18:
+- 2023-04-18:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2023-04-18
       crop_start_type: sowing
       crop_end_date: 2023-08-16
       crop_end_type: harvest
       crop_name: barley
       variety_name: Spring_barley_301
       max_duration: 365
-    StateEvents:
-    - &id003
-      event_signal: irrigate
-      event_state: SM
-      zero_condition: falling
-      name: Soil moisture driven irrigation scheduling
-      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
       events_table:
-      - 0.045399796670239086:
-          amount: 2.0
+      - 2023-04-18:
+          amount: 20
           efficiency: 0.8
-    TimedEvents: {}
-- &id002 2024-04-13:
+      - 2023-05-08:
+          amount: 20
+          efficiency: 0.8
+      - 2023-05-28:
+          amount: 20
+          efficiency: 0.8
+      - 2023-06-17:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-07:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-27:
+          amount: 20
+          efficiency: 0.8
+      - 2023-08-16:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2024-04-13:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2024-04-13
       crop_start_type: sowing
       crop_end_date: 2024-09-20
       crop_end_type: harvest
       crop_name: seed_onion
       variety_name: onion_agriadapt
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- &id004 2025-03-19:
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2024-04-13:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-03:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-23:
+          amount: 20
+          efficiency: 0.8
+      - 2024-06-12:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-02:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-22:
+          amount: 20
+          efficiency: 0.8
+      - 2024-08-11:
+          amount: 20
+          efficiency: 0.8
+      - 2024-08-31:
+          amount: 20
+          efficiency: 0.8
+      - 2024-09-20:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2025-03-19:
     CropCalendar:
-      crop_start_date: *id004
+      crop_start_date: 2025-03-19
       crop_start_type: sowing
-      crop_end_date: &id005 2025-12-04
+      crop_end_date: 2025-12-04
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- *id005:
-    CropCalendar: null
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2025-03-19:
+          amount: 20
+          efficiency: 0.8
+      - 2025-04-08:
+          amount: 20
+          efficiency: 0.8
+      - 2025-04-28:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-18:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-07:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-27:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-17:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-06:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-26:
+          amount: 20
+          efficiency: 0.8
+      - 2025-09-15:
+          amount: 20
+          efficiency: 0.8
+      - 2025-10-05:
+          amount: 20
+          efficiency: 0.8
+      - 2025-10-25:
+          amount: 20
+          efficiency: 0.8
+      - 2025-11-14:
+          amount: 20
+          efficiency: 0.8
+      - 2025-12-04:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: null
 Version: '1.0'

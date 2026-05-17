@@ -1,26 +1,35 @@
 AgroManagement:
-- &id001 2025-03-24:
+- 2025-03-24:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2025-03-24
       crop_start_type: sowing
-      crop_end_date: &id002 2025-07-19
+      crop_end_date: 2025-07-19
       crop_end_type: harvest
       crop_name: barley
       variety_name: Spring_barley_301
       max_duration: 365
-    StateEvents:
+    TimedEvents:
     - event_signal: irrigate
-      event_state: SM
-      zero_condition: falling
-      name: Soil moisture driven irrigation scheduling
-      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
       events_table:
-      - 0.05706330041702929:
-          amount: 2.0
+      - 2025-03-24:
+          amount: 20
           efficiency: 0.8
-    TimedEvents: {}
-- *id002:
-    CropCalendar: null
+      - 2025-04-13:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-03:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-23:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-12:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-02:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: null
 Version: '1.0'

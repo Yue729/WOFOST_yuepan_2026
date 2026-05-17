@@ -1,24 +1,24 @@
 AgroManagement:
-- &id001 2024-05-11:
+- 2024-05-11:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2024-05-11
       crop_start_type: sowing
       crop_end_date: 2024-12-03
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
-- &id002 2024-12-04:
+- 2024-12-04:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2024-12-04
       crop_start_type: sowing
       crop_end_date: 2025-07-19
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'

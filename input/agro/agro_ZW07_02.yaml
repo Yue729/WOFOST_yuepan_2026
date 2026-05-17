@@ -1,51 +1,91 @@
 AgroManagement:
-- &id001 2022-11-07:
+- 2022-11-07:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2022-11-07
       crop_start_type: sowing
       crop_end_date: 2023-07-20
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
-    StateEvents:
-    - &id003
-      event_signal: irrigate
-      event_state: SM
-      zero_condition: falling
-      name: Soil moisture driven irrigation scheduling
-      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
-      events_table:
-      - 0.16888376053286275:
-          amount: 2.0
-          efficiency: 0.8
-    TimedEvents: {}
-- &id002 2024-05-11:
+    TimedEvents: null
+    StateEvents: null
+- 2024-05-11:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2024-05-11
       crop_start_type: sowing
       crop_end_date: 2024-09-20
       crop_end_type: harvest
       crop_name: seed_onion
       variety_name: onion_agriadapt
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- &id004 2025-04-11:
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2024-05-11:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-31:
+          amount: 20
+          efficiency: 0.8
+      - 2024-06-20:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-10:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-30:
+          amount: 20
+          efficiency: 0.8
+      - 2024-08-19:
+          amount: 20
+          efficiency: 0.8
+      - 2024-09-08:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2025-04-11:
     CropCalendar:
-      crop_start_date: *id004
+      crop_start_date: 2025-04-11
       crop_start_type: sowing
-      crop_end_date: &id005 2025-10-04
+      crop_end_date: 2025-10-04
       crop_end_type: harvest
       crop_name: potato
-      variety_name: Potato_701
+      variety_name: Fontane
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- *id005:
-    CropCalendar: null
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2025-04-11:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-01:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-21:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-10:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-30:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-20:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-09:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-29:
+          amount: 20
+          efficiency: 0.8
+      - 2025-09-18:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: null
 Version: '1.0'

@@ -1,35 +1,63 @@
 AgroManagement:
-- &id001 2023-05-17:
+- 2023-05-17:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2023-05-17
       crop_start_type: sowing
       crop_end_date: 2023-10-17
       crop_end_type: harvest
       crop_name: potato
       variety_name: Fontane
       max_duration: 365
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2023-05-17:
+          amount: 20
+          efficiency: 0.8
+      - 2023-06-06:
+          amount: 20
+          efficiency: 0.8
+      - 2023-06-26:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-16:
+          amount: 20
+          efficiency: 0.8
+      - 2023-08-05:
+          amount: 20
+          efficiency: 0.8
+      - 2023-08-25:
+          amount: 20
+          efficiency: 0.8
+      - 2023-09-14:
+          amount: 20
+          efficiency: 0.8
+      - 2023-10-04:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: {}
-- &id002 2023-10-18:
+- 2023-10-18:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2023-10-18
       crop_start_type: sowing
       crop_end_date: 2024-08-02
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
-- &id003 2025-03-20:
+- 2025-03-20:
     CropCalendar:
-      crop_start_date: *id003
+      crop_start_date: 2025-03-20
       crop_start_type: sowing
       crop_end_date: 2025-10-29
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'

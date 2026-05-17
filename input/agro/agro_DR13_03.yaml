@@ -1,51 +1,140 @@
 AgroManagement:
-- &id001 2023-04-21:
+- 2023-04-21:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2023-04-21
       crop_start_type: sowing
-      crop_end_date: 2023-10-22
+      crop_end_date: 2023-10-17
       crop_end_type: harvest
       crop_name: potato
-      variety_name: Potato_701
+      variety_name: Fontane
       max_duration: 365
-    StateEvents:
-    - &id003
-      event_signal: irrigate
-      event_state: SM
-      zero_condition: falling
-      name: Soil moisture driven irrigation scheduling
-      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
       events_table:
-      - 0.04451631786926053:
-          amount: 2.0
+      - 2023-04-21:
+          amount: 20
           efficiency: 0.8
-    TimedEvents: {}
-- &id002 2023-10-24:
+      - 2023-05-11:
+          amount: 20
+          efficiency: 0.8
+      - 2023-05-31:
+          amount: 20
+          efficiency: 0.8
+      - 2023-06-20:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-10:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-30:
+          amount: 20
+          efficiency: 0.8
+      - 2023-08-19:
+          amount: 20
+          efficiency: 0.8
+      - 2023-09-08:
+          amount: 20
+          efficiency: 0.8
+      - 2023-09-28:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2023-10-18:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2023-10-18
       crop_start_type: sowing
       crop_end_date: 2024-07-19
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- &id004 2025-03-21:
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2023-10-18:
+          amount: 20
+          efficiency: 0.8
+      - 2023-11-07:
+          amount: 20
+          efficiency: 0.8
+      - 2023-11-27:
+          amount: 20
+          efficiency: 0.8
+      - 2023-12-17:
+          amount: 20
+          efficiency: 0.8
+      - 2024-01-06:
+          amount: 20
+          efficiency: 0.8
+      - 2024-01-26:
+          amount: 20
+          efficiency: 0.8
+      - 2024-02-15:
+          amount: 20
+          efficiency: 0.8
+      - 2024-03-06:
+          amount: 20
+          efficiency: 0.8
+      - 2024-03-26:
+          amount: 20
+          efficiency: 0.8
+      - 2024-04-15:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-05:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-25:
+          amount: 20
+          efficiency: 0.8
+      - 2024-06-14:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-04:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2025-03-21:
     CropCalendar:
-      crop_start_date: *id004
+      crop_start_date: 2025-03-21
       crop_start_type: sowing
-      crop_end_date: &id005 2025-08-23
+      crop_end_date: 2025-08-23
       crop_end_type: harvest
       crop_name: seed_onion
       variety_name: onion_agriadapt
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- *id005:
-    CropCalendar: null
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2025-03-21:
+          amount: 20
+          efficiency: 0.8
+      - 2025-04-10:
+          amount: 20
+          efficiency: 0.8
+      - 2025-04-30:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-20:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-09:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-29:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-19:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-08:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: null
 Version: '1.0'

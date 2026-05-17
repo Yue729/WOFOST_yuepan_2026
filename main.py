@@ -9,13 +9,11 @@ from van_genuchten import ClassicalSoilWaterBalanceParameterProvider
 from types import SimpleNamespace
 from pathlib import Path
 from pcse.base import ParameterProvider
-from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider
-from pcse.models import Wofost73_PP
-from pcse.models import Wofost72_WLP_FD
-from datetime import datetime
+from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider, YAMLAgroManagementReader
+from pcse.models import Wofost73_PP, Wofost73_WLP_CWB
+from datetime import datetime, timedelta, date
 
-
-
+CUSTOM_SUGARBEET_FILE = Path(__file__).parent / "input" / "Wofost73_PP_sugarbeet.yaml"
 
 RAW_DATA_PATH = Path(r"/Users/panyue/Desktop/final_data/")
 SOIL_DATA_FILE = RAW_DATA_PATH / "3_soil_data/general_soil_characteristics/general_soil_characteristics.xlsx"
@@ -23,7 +21,6 @@ CROP_MANAGEMENT_DIR = RAW_DATA_PATH / "1_crop_management_data"
 LOCATION_DATA_FILE = RAW_DATA_PATH / "4_other_files/locations_data.xlsx"
 
 GLOBAL_SITE_FILE = Path(__file__).parent.joinpath(Path("input/9_Wofost81_PP_site.yaml"))
-
 MANAGEMENT_COLS = [
     "ID_all",
     "ID_field",
@@ -36,8 +33,8 @@ MANAGEMENT_COLS = [
 ]
 
 
-def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dict, irrigation_data: dict, soil_dir: Path):
-    # `clean column names
+def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dict):
+    # Read main crop registration
     df = pd.read_excel(f)
     df.columns = df.columns.astype(str).str.strip()
 
@@ -56,6 +53,26 @@ def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dic
     for col in ["date_planting", "date_harvest"]:
         df[col] = pd.to_datetime(df[col], errors="coerce", dayfirst=True)
         df[col] = df[col].apply(lambda x: x.date() if pd.notna(x) else None)
+
+    # ── Load irrigation data from crop_registration_extra.xlsx ──────────────
+    extra_file = f.parent / f.name.replace("basic", "extra")
+    irrigation_map = {}  # {(ID_field, year): "yes"/"no"}
+    if extra_file.exists():
+        try:
+            df_extra = pd.read_excel(extra_file)
+            df_extra.columns = df_extra.columns.astype(str).str.strip()
+            if "ID_field" in df_extra.columns and "year" in df_extra.columns and "irrigation_main_crop" in df_extra.columns:
+                for _, row in df_extra.iterrows():
+                    key = (str(row["ID_field"]).strip(), int(row["year"]))
+                    irrigation_map[key] = str(row["irrigation_main_crop"]).strip().lower()
+                print(f"  Loaded irrigation data: {len(irrigation_map)} records from {extra_file.name}")
+            else:
+                print(f"  ⚠ Missing required columns in {extra_file.name}")
+        except Exception as e:
+            print(f"  ⚠ Could not load irrigation data from {extra_file.name}: {e}")
+    else:
+        print(f"  ⚠ Irrigation file not found: {extra_file}")
+
     print(df)
 
     for field_id, group in df.groupby("ID_field"):
@@ -71,7 +88,6 @@ def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dic
                 print(f"Skipping row {row} due to missing planting date or harvest date.")
                 continue
 
-
             normalized_crop_name = map_crop_name(row['crop'].lower().strip())
 
             if normalized_crop_name not in GOOD_CROP_NAMES:
@@ -80,16 +96,34 @@ def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dic
             available_varieties = list(crops_varieties.get(normalized_crop_name, []))
 
             if len(available_varieties) == 0:
-                # TODO: fix me what is variety?
                 raise ValueError(f"Crop '{normalized_crop_name}' not found in crop data provider.")
-            
-            if row['variety'] not in available_varieties:
-                # Use first available variety if the provided variety is not found
-                print(f"Warning: Variety '{row['variety']}' not found for crop '{normalized_crop_name}'. Using '{available_varieties[0]}'.")
-                variety = available_varieties[0]
-            else:
-                variety = row['variety']
-            
+
+            raw_variety = str(row['variety']).strip() if pd.notna(row['variety']) else ''
+            variety = resolve_variety(normalized_crop_name, raw_variety)
+
+            # ── Build irrigation events (20mm every 20 days, 0.8 efficiency) ───
+            # CORRECT FORMAT: TimedEvents is a list with single dict containing events_table
+            timed_events = None
+            irr_key = (str(row["ID_field"]).strip(), int(row["year"]))
+            if irrigation_map.get(irr_key) == "yes":
+                events_table = []
+                current_date = planting_date
+                harvest_date = row['date_harvest']
+                while current_date <= harvest_date:
+                    events_table.append({
+                        current_date: {"amount": 20, "efficiency": 0.8}
+                    })
+                    current_date += timedelta(days=20)
+                
+                timed_events = [{
+                    "event_signal": "irrigate",
+                    "name": "Irrigation application table",
+                    "comment": "Irrigation scheduled every 20 days, 20mm per event",
+                    "events_table": events_table
+                }]
+                print(f"  Added {len(events_table)} irrigation events for {field_id} year {row['year']}")
+
+            # Campaign entry with date object as key
             agro_entry = {
                 planting_date: {
                     "CropCalendar": {
@@ -100,43 +134,39 @@ def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dic
                         "crop_name": normalized_crop_name.value,
                         "variety_name": variety,
                         "max_duration": 365,
-                        # "ID_field": id_field,
-                        # "ID_farm": row["ID_farm"],
-                        # "ID_all": row["ID_all"]
-
                     },
-                    "StateEvents": None,
-                    "TimedEvents": {}
+                    "TimedEvents": timed_events,
+                    "StateEvents": None
                 }
             }
             agro_management.append(agro_entry)
         
-        # Create the final YAML structure
+        # Save with custom YAML representer for dates
+        output_path = output_dir / f"agro_{field_id}.yaml"
+        if output_path.exists():
+            raise RuntimeError(f"Output file {output_path} already exists. Please check for duplicates in the input data.")
+        
         output_data = {
             "AgroManagement": agro_management,
             "Version": "1.0"
         }
+        
+        # Custom representer: write date as unquoted YAML timestamp (e.g. 2023-04-18)
+        # tag:yaml.org,2002:timestamp ensures PyYAML writes unquoted dates
+        # which are then parsed back as datetime.date objects by YAMLAgroManagementReader
+        class _AgroDumper(yaml.Dumper):
+            def ignore_aliases(self, data):
+                return True  # prevent &id001/∗id001 anchors when same date reused
 
-        # Add irrigation StateEvents if field is irrigated
-        is_irrigated = irrigation_data.get(row['ID_all'], False) if 'ID_all' in row else False
-        if is_irrigated:
-            # Load soil data for this field to get SMW
-            soil_file = soil_dir / f"soil_{field_id}.yaml"
-            if soil_file.exists():
-                with open(soil_file, "r") as f:
-                    soil_dict = yaml.safe_load(f)
-            else:
-                soil_dict = {}
-            
-            output_data = add_irrigation_to_agro_yaml(output_data, field_id, is_irrigated, soil_dict)
+        def _date_representer(dumper, data):
+            return dumper.represent_scalar('tag:yaml.org,2002:timestamp', data.isoformat())
 
-        output_path = output_dir / f"agro_{field_id}.yaml"
-        if output_path.exists():
-            raise RuntimeError(f"Output file {output_path} already exists. Please check for duplicates in the input data.")
+        _AgroDumper.add_representer(date, _date_representer)
+
         with open(output_path, "w", encoding="utf-8") as f:
-            yaml.safe_dump(output_data, f, sort_keys=False, default_flow_style=False)
+            yaml.dump(output_data, f, Dumper=_AgroDumper, sort_keys=False,
+                      default_flow_style=False, allow_unicode=True)
         print(f"Wrote {output_path}")
-
 
 
 SOIL_COLS = [
@@ -146,103 +176,6 @@ SOIL_COLS = [
     "OM",
     "ID_field"
 ]
-
-def load_irrigation_data():
-    """
-    Load irrigation data from crop_registration_extra_ files.
-    Returns a dictionary mapping ID_all -> irrigation_status ('yes'/'no')
-    """
-    irrigation_data = {}
-    
-    for extra_file in CROP_MANAGEMENT_DIR.rglob("crop_registration_extra_*.xlsx"):
-        df = pd.read_excel(extra_file)
-        
-        # Extract irrigation status for each ID_all
-        for _, row in df.iterrows():
-            id_all = str(row["ID_all"]).strip()
-            irrigation_status = str(row["irrigation_main_crop"]).strip().lower()
-            irrigation_data[id_all] = irrigation_status == 'yes'
-    
-    return irrigation_data
-
-
-def add_irrigation_to_agro_yaml(agro_yaml_data: dict, field_id: str, is_irrigated: bool, soil_data: dict) -> dict:
-    """
-    Add irrigation StateEvents to agro management YAML data if field is irrigated.
-    
-    Uses state-based irrigation that applies 20mm water when soil moisture reaches wilting point (SMW).
-    
-    Parameters:
-    -----------
-    agro_yaml_data : dict
-        The agro management YAML structure
-    field_id : str
-        The field identifier
-    is_irrigated : bool
-        Whether the field should be irrigated
-    soil_data : dict
-        Soil parameters dictionary containing SMW (wilting point)
-        
-    Returns:
-    --------
-    dict : Modified agro_yaml_data with irrigation StateEvents added
-    """
-    if not is_irrigated:
-        return agro_yaml_data
-    
-    # Get wilting point from soil data
-    smw = soil_data.get('SMW', 0.05)  # Default to 0.05 if not available
-    
-    # Create StateEvent for irrigation triggered by soil moisture
-    # When SM (soil moisture) falls to SMW (wilting point), apply 20mm irrigation
-    # amount in cm = 20mm / 10 = 2.0 cm
-    irrigation_event = {
-        'event_signal': 'irrigate',
-        'event_state': 'SM',
-        'zero_condition': 'falling',
-        'name': 'Soil moisture driven irrigation scheduling',
-        'comment': 'Irrigation applied when soil moisture reaches wilting point (20mm water)',
-        'events_table': [
-            {smw: {'amount': 2.0, 'efficiency': 0.8}}
-        ]
-    }
-    
-    # Add irrigation StateEvent to each campaign in AgroManagement
-    if 'AgroManagement' in agro_yaml_data:
-        for campaign_entry in agro_yaml_data['AgroManagement']:
-            for date_key, campaign_data in campaign_entry.items():
-                if isinstance(campaign_data, dict):
-                    # Initialize StateEvents list if it doesn't exist
-                    if campaign_data.get('StateEvents') is None:
-                        campaign_data['StateEvents'] = []
-                    elif not isinstance(campaign_data['StateEvents'], list):
-                        campaign_data['StateEvents'] = []
-                    
-                    # Add irrigation StateEvent
-                    campaign_data['StateEvents'].append(irrigation_event)
-        
-        # Add trailing empty campaign after last campaign
-        # PCSE requires this when StateEvents are present
-        if agro_yaml_data['AgroManagement']:
-            last_campaign = agro_yaml_data['AgroManagement'][-1]
-            # Get the last campaign's end date
-            for date_key, campaign_data in last_campaign.items():
-                if isinstance(campaign_data, dict) and 'CropCalendar' in campaign_data:
-                    end_date = campaign_data['CropCalendar'].get('crop_end_date')
-                    if end_date:
-                        # Add trailing empty campaign after the end date
-                        trailing_campaign = {
-                            end_date: {
-                                'CropCalendar': None,
-                                'StateEvents': None,
-                                'TimedEvents': None
-                            }
-                        }
-                        agro_yaml_data['AgroManagement'].append(trailing_campaign)
-                        break
-    
-    return agro_yaml_data
-
 
 def extract_soil_site_data(soil_file: Path, output_dir: Path):
     df = pd.read_excel(soil_file)
@@ -394,8 +327,22 @@ from enum import StrEnum
 
 class CropType(StrEnum):
     BARLEY = 'barley'
+    CASSAVA = 'cassava'
+    CHICKPEA = 'chickpea'
+    COTTON = 'cotton'
+    COWPEA = 'cowpea'
+    FABABEAN = 'fababean'
+    GROUNDNUT = 'groundnut'
+    MUNGBEAN = 'mungbean'
+    PIGEONPEA = 'pigeonpea'
     POTATO = 'potato'
+    RAPESEED = 'rapeseed'
+    RICE = 'rice'
+    SOYBEAN = 'soybean'
     SUGARBEET = 'sugarbeet'
+    SUNFLOWER = 'sunflower'
+    SWEETPOTATO = 'sweetpotato'
+    TOBACCO = 'tobacco'
     WHEAT = 'wheat'
     SEED_ONION = 'seed_onion'
 
@@ -409,29 +356,26 @@ CROP_NAME_MAPPING = {
     # Barley
     'barley': CropType.BARLEY,
     'spring barley': CropType.BARLEY,
-    'winter barley': CropType.WHEAT,
-    #map winter barley to wheat because we don't have a barley variety in the crop data provider, but we do have a wheat variety that can be used as a proxy for winter barley
-    
-    
+    'winter barley': CropType.WHEAT,   # treated as winter wheat in WOFOST
+
     # Potato
     'potato': CropType.POTATO,
     'ware potato': CropType.POTATO,
     'seed potato': CropType.POTATO,
     'white potato': CropType.POTATO,
     'starch potato': CropType.POTATO,
-    
+
     # Sugarbeet
     'sugarbeet': CropType.SUGARBEET,
     'sugar beet': CropType.SUGARBEET,
     'sugar-beet': CropType.SUGARBEET,
     'beet': CropType.SUGARBEET,
-    
+
     # Wheat
     'wheat': CropType.WHEAT,
     'winter wheat': CropType.WHEAT,
-    'spring wheat': CropType.BARLEY,
-    #map spring wheat to barley because we don't have a spring wheat variety in the crop data provider, but we do have a barley variety that can be used as a proxy for spring wheat
-    
+    'spring wheat': CropType.BARLEY,   # treated as spring barley in WOFOST
+
     # Seed Onion
     'seed onion': CropType.SEED_ONION,
     'seed_onion': CropType.SEED_ONION,
@@ -446,34 +390,77 @@ def map_crop_name(crop_name: str) -> Optional[CropType]:
     return None
 
 
+# Potato varieties that have a direct match in WOFOST 7.3
+_POTATO_WOFOST_VARIETIES = {
+    'fontane':   'Fontane',
+    'festien':   'Festien',
+    'innovator': 'Innovator',
+    'markies':   'Markies',
+}
+_POTATO_FALLBACK = 'Fontane'
 
-def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost73_PP):
+def resolve_variety(crop_type: CropType, raw_variety: str) -> str:
+    """Resolve the WOFOST variety name from the crop type and raw field variety string."""
+
+    # Barley (includes spring barley and spring wheat remapped to barley)
+    if crop_type == CropType.BARLEY:
+        return 'Spring_barley_301'
+
+    # Wheat (includes winter wheat and winter barley remapped to wheat)
+    if crop_type == CropType.WHEAT:
+        return 'Winter_wheat_101'
+
+    # Sugar beet: always Sugarbeet_601
+    if crop_type == CropType.SUGARBEET:
+        return 'Sugarbeet_601'
+
+    # Seed onion: always onion_agriadapt
+    if crop_type == CropType.SEED_ONION:
+        return 'onion_agriadapt'
+
+    # Potato: match field variety if available in WOFOST, else fall back to Fontane
+    if crop_type == CropType.POTATO:
+        if raw_variety:
+            wofost_name = _POTATO_WOFOST_VARIETIES.get(raw_variety.strip().lower())
+            if wofost_name:
+                return wofost_name
+        return _POTATO_FALLBACK
+    raise ValueError(f"No variety resolution rule for crop type '{crop_type}'")
+
+
+def _apply_custom_sugarbeet_params(crop_dict: YAMLCropDataProvider) -> None:
+    """Patch all sugarbeet varieties in crop_dict with custom parameters from the local file.
+
+    The custom file is a flat YAML of {param: value}. For every variety under
+    the 'sugarbeet' key in crop_dict._store we override any parameter that
+    differs from the default, preserving the existing description/units metadata.
     """
-    Run WOFOST model for a given field.
-    
-    Parameters:
-    -----------
-    field_id : str
-        The field identifier
-    field_to_location_map : dict
-        Dictionary mapping field IDs to coordinates
-    model_class : class
-        The WOFOST model class to run (Wofost73_PP or Wofost72_WLP_FD)
-        
-    Returns:
-    --------
-    pd.DataFrame : Model output with crop_name added
-    """
-    crop_dict = YAMLCropDataProvider(model_class)
+    if not CUSTOM_SUGARBEET_FILE.exists():
+        return
+    custom_params = yaml.safe_load(CUSTOM_SUGARBEET_FILE.read_text())
+    sb_store = crop_dict._store.get('sugarbeet', {})
+    for variety, variety_params in sb_store.items():
+        for param, custom_value in custom_params.items():
+            if param in variety_params:
+                entry = variety_params[param]
+                if isinstance(entry, list) and len(entry) >= 1:
+                    entry[0] = custom_value  # preserve description and units
+                else:
+                    variety_params[param] = custom_value
+    print(f"Applied custom sugarbeet parameters from {CUSTOM_SUGARBEET_FILE.name} "
+          f"to varieties: {list(sb_store.keys())}")
+
+
+def run_model(field_id: str, field_to_location_map: dict):
+    crop_dict = YAMLCropDataProvider(Wofost73_PP)
+    _apply_custom_sugarbeet_params(crop_dict)
 
     coordinates = field_to_location_map[field_id]
     latitude = coordinates["latitude"]
     longitude = coordinates["longitude"]
-    model_name = model_class.__name__
-    print(f"Running {model_name} for field {field_id} at location (lat: {latitude}, long: {longitude})")
-    weather_data = NASAPowerWeatherDataProvider(latitude,
-                                            longitude)
-    
+    print(f"Running model for field {field_id} at location (lat: {latitude}, long: {longitude})")
+    weather_data = NASAPowerWeatherDataProvider(latitude, longitude)
+
     with open(GLOBAL_SITE_FILE, "r") as f:
         site_dict = yaml.safe_load(f.read())
 
@@ -482,158 +469,83 @@ def run_model(field_id: str, field_to_location_map: dict, model_class=Wofost73_P
         soil_dict = yaml.safe_load(f.read())
 
     agro_file = Path(__file__).parent.joinpath(Path(f"input/agro/agro_{field_id}.yaml"))
-    with open(agro_file, "r") as f:
-        agro_dict = yaml.safe_load(f.read())
+    agro_mgmt = YAMLAgroManagementReader(agro_file)
+
+    # Build a list of (start_date, end_date, crop_name) for campaign-to-row matching.
+    # year is taken from crop_end_date so winter crops (sown 2022, harvested 2023) get year=2023.
+    campaigns = []  # list of (start_date, end_date, crop_name, harvest_year)
+    for campaign in agro_mgmt:
+        for start_date, content in campaign.items():
+            cal = content.get("CropCalendar") or {}
+            crop = cal.get("crop_name", "unknown")
+            end_date = cal.get("crop_end_date")
+            if end_date is not None:
+                harvest_year = end_date.year if hasattr(end_date, 'year') else int(str(end_date)[:4])
+            else:
+                harvest_year = start_date.year  # fallback
+                end_date = start_date  # unknown end
+            campaigns.append((start_date, end_date, crop, harvest_year))
 
     parameters = ParameterProvider(sitedata=site_dict,
                                    soildata=soil_dict,
                                    cropdata=crop_dict)
-    wofost = model_class(parameters, weather_data, agro_dict)
 
-    wofost.run_till_terminate()
-    output = wofost.get_output()
-    df = pd.DataFrame(output)
+    # ── Run WOFOST 7.3 PP ───────────────────────────────────────────────────
+    wofost_pp = Wofost73_PP(parameters, weather_data, agro_mgmt)
+    wofost_pp.run_till_terminate()
+    df_pp = pd.DataFrame(wofost_pp.get_output())
+    df_pp.insert(0, 'field_id', field_id)
+    df_pp.columns = ['field_id'] + [f'PP_{c}' if c != 'day' else c for c in df_pp.columns[1:]]
+
+    # ── Run WOFOST 7.3 WLP_CWB ─────────────────────────────────────────────
+    wofost_wlp = Wofost73_WLP_CWB(parameters, weather_data, agro_mgmt)
+    wofost_wlp.run_till_terminate()
+    df_wlp = pd.DataFrame(wofost_wlp.get_output())
+    df_wlp.insert(0, 'field_id', field_id)
+    df_wlp.columns = ['field_id'] + [f'WLP_{c}' if c != 'day' else c for c in df_wlp.columns[1:]]
+
+    # Merge on day + field_id
+    df = pd.merge(df_pp, df_wlp, on=['field_id', 'day'], how='outer')
+
+    # Add crop_name and year by matching each row's day to its campaign date range.
+    # This correctly assigns harvest_year from crop_end_date (not sowing date).
+    def _get_campaign_info(day):
+        for start_date, end_date, crop, harvest_year in campaigns:
+            if start_date <= day.date() <= end_date:
+                return crop, harvest_year
+        # Fallback: assign to campaign whose end_date is closest after day
+        future = [(c, hy) for s, e, c, hy in campaigns if day.date() <= e]
+        if future:
+            return future[0]
+        return 'unknown', day.year
+
+    df['year'] = pd.to_datetime(df['day'])
+    df[['crop_name', 'year']] = pd.DataFrame(
+        df['year'].apply(_get_campaign_info).tolist(),
+        index=df.index
+    )
+
+    # Reorder: field_id, day, year, crop_name first
+    front_cols = ['field_id', 'day', 'year', 'crop_name']
+    other_cols = [c for c in df.columns if c not in front_cols]
+    df = df[front_cols + other_cols]
+
+    # Keep only the harvest date row (last simulated day) per year/crop
+    df = df.sort_values('day')
+    df = df.groupby(['field_id', 'year', 'crop_name'], as_index=False).last()
+
     return df
 
-
-
-def update_agro_variety_names():
-    """
-    Update variety names in all agro YAML files based on crop type.
-    
-    Mapping:
-    - wheat -> Winter_wheat_101
-    - sugarbeet -> Sugarbeet_601
-    - seed_onion -> onion_agriadapt
-    - barley -> Spring_barley_301
-    """
-    variety_mapping = {
-        'wheat': 'Winter_wheat_101',
-        'sugarbeet': 'Sugarbeet_601',
-        'seed_onion': 'onion_agriadapt',
-        'barley': 'Spring_barley_301'
-    }
-    
-    agro_dir = Path(__file__).parent.joinpath(Path("input/agro"))
-    
-    # Process all agro YAML files
-    for agro_file in agro_dir.glob("agro_*.yaml"):
-        print(f"Processing {agro_file.name}...")
-        
-        with open(agro_file, "r") as f:
-            data = yaml.safe_load(f)
-        
-        # Update variety names
-        if "AgroManagement" in data:
-            for entry in data["AgroManagement"]:
-                for date_key, date_value in entry.items():
-                    if isinstance(date_value, dict) and "CropCalendar" in date_value and date_value["CropCalendar"] is not None:
-                        crop_name = date_value["CropCalendar"].get("crop_name", "").lower()
-                        
-                        if crop_name in variety_mapping:
-                            old_variety = date_value["CropCalendar"]["variety_name"]
-                            new_variety = variety_mapping[crop_name]
-                            date_value["CropCalendar"]["variety_name"] = new_variety
-                            print(f"  {crop_name}: {old_variety} -> {new_variety}")
-        
-        # Write back
-        with open(agro_file, "w") as f:
-            yaml.safe_dump(data, f, sort_keys=False, default_flow_style=False)
-        
-        print(f"  ✓ Updated {agro_file.name}")
-    
-    print("\nAll agro files updated!")
-
-
-def load_agro_data_of_field(field_id: str) -> dict:
-    """
-    Load agro management data for a specific field from its YAML file.
-    
-    Parameters:
-    -----------
-    field_id : str
-        The field identifier
-        
-    Returns:
-    --------
-    dict : Agro management data for the specified field
-    """
-    agro_file = Path(__file__).parent.joinpath(Path(f"input/agro/agro_{field_id}.yaml"))
-    
-    if not agro_file.exists():
-        raise FileNotFoundError(f"Agro file not found for field {field_id}: {agro_file}")
-    
-    with open(agro_file, "r") as f:
-        agro_data = yaml.safe_load(f)
-    
-    return agro_data
-
-def dump_model_results_to_excel(results_dict: dict, output_file: Path):
-    if not results_dict:
-        print(f"  Warning: No results to export to {output_file.name}. Skipping...")
-        return
-    
-    concat_81_rows = []
-    for field_id, df in results_dict.items():
-        agro_data = load_agro_data_of_field(field_id)
-        end_dates = {}
-        for year in agro_data["AgroManagement"]:
-            year_key = list(year.keys())[0]
-            year_data = year[year_key]
-            crop_calendar = year_data.get("CropCalendar")
-            if crop_calendar is not None:
-                end_dates[crop_calendar["crop_end_date"]] = crop_calendar["crop_name"]
-        end_date_rows = df[df["day"].isin(list(end_dates.keys()))].copy()
-        end_date_rows["field_id"] = field_id
-        # Add crop_name column initialized as empty strings
-        end_date_rows["crop_name"] = ""
-        for end_date, crop_name in end_dates.items():
-            print(f"Mapping end date {end_date} to crop {crop_name} for field {field_id}")
-            mask = end_date_rows["day"] == end_date
-            end_date_rows.loc[mask, "crop_name"] = crop_name
-        concat_81_rows.append(end_date_rows)
-    
-    if concat_81_rows:
-        pd.concat(concat_81_rows, ignore_index=True).to_excel(output_file, index=False)
-        print(f"  ✓ Results saved to {output_file.name}")
-        
 
 def main():
 
     crop_dict = YAMLCropDataProvider(Wofost73_PP)
+    _apply_custom_sugarbeet_params(crop_dict)
 
     crops_varieties = crop_dict.get_crops_varieties()
-    print("Sugarbeet varieties:", list(crops_varieties['sugarbeet']))
-    print("Wheat varieties:", list(crops_varieties['wheat']))
-    print("Barley varieties:", list(crops_varieties['barley']))
-    
-    # Check what crops are available
-    print(f"\nAll available crops: {list(crops_varieties.keys())}")
-    
-    # Check for onion varieties
-    onion_varieties = None
-    for crop_name in crops_varieties.keys():
-        if 'onion' in crop_name.lower():
-            print(f"Found onion crop: {crop_name}")
-            onion_varieties = crops_varieties[crop_name]
-            print(f"Onion varieties available: {list(onion_varieties)}")
-    
-    if onion_varieties is None:
-        print("WARNING: No onion crop found in crops_varieties!")
-    
-    print("Loading irrigation data from crop_registration_extra_ files...")
-    irrigation_data = load_irrigation_data()
-    print(f"Loaded irrigation data for {len(irrigation_data)} records")
-    irrigated_count = sum(1 for v in irrigation_data.values() if v)
-    print(f"Irrigated fields: {irrigated_count}")
-    
-    print("Extracting soil data first (needed for irrigation parameters)...")
-    soil_output_dir = Path(__file__).parent.joinpath(Path("input/soil"))
-    if soil_output_dir.exists():
-        shutil.rmtree(soil_output_dir)
-    soil_output_dir.mkdir(parents=True, exist_ok=True)
-    extract_soil_site_data(SOIL_DATA_FILE, soil_output_dir)
-    
+    print(crops_varieties[CropType.SUGARBEET])
+    print(crops_varieties[CropType.WHEAT])
+    print(crops_varieties[CropType.BARLEY])
     print("Extracting agro management data...")
 
     output_dir = Path(__file__).parent.joinpath(Path("input/agro"))
@@ -642,11 +554,14 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     for f in CROP_MANAGEMENT_DIR.rglob("crop_registration_basic_*.xlsx"):
         print(f"Processing {f.relative_to(CROP_MANAGEMENT_DIR)}...")
-        extract_agro_management_data(f, output_dir, crops_varieties, irrigation_data, soil_output_dir)
+        extract_agro_management_data(f, output_dir, crops_varieties)
 
-    # Update variety names in agro files
-    print("\nUpdating variety names in agro files...")
-    update_agro_variety_names()
+    soil_output_dir = Path(__file__).parent.joinpath(Path("input/soil"))
+    if soil_output_dir.exists():
+        shutil.rmtree(soil_output_dir)
+    soil_output_dir.mkdir(parents=True, exist_ok=True)
+    print("Copying soil data...")
+    extract_soil_site_data(SOIL_DATA_FILE, soil_output_dir)
 
     field_to_location = get_ID_field_to_location_map()
 
@@ -656,75 +571,39 @@ def main():
     if not fields_from_agro.issubset(fields_from_soil):
         raise RuntimeError(f"Some fields in soil data are missing from agro data. Soil: {fields_from_soil}, Agro: {fields_from_agro}")
 
-    # Create output directories for model results
-    output_excel_dir = Path(__file__).parent.joinpath(Path("output/model_results"))
-    output_excel_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Initialize dataframes to collect results from all fields
-    wofost73_pp_results = {}
-    wofost_wlp_results = {}
-    
-    exceptions_73_pp = []
-    exceptions_wlp = []
-    
-    # Run WOFOST73_PP model
-    print("\n" + "="*80)
-    print("RUNNING WOFOST73_PP MODEL")
-    print("="*80)
+    model_runs = []
+    exceptions = []
     for field_id in fields_from_agro:
-        print(f"\nRunning WOFOST73_PP for field {field_id}...")
+        print(f"Running model for field {field_id}...")
         try:
-            df = run_model(field_id, field_to_location, model_class=Wofost73_PP)
-            wofost73_pp_results[field_id] = df
-            print(f"  ✓ Completed for {field_id}")
+            df = run_model(field_id, field_to_location)
+            model_runs.append(df)
+            print(df)
         except Exception as e:
-            print(f"  ✗ Error for field {field_id}: {e}")
-            exceptions_73_pp.append((field_id, str(e)))
-    
-    # Run Wofost72_WLP_FD model
-    print("\n" + "="*80)
-    print("RUNNING WOFOST72_WLP_FD MODEL")
-    print("="*80)
-    for field_id in fields_from_agro:
-        print(f"\nRunning Wofost72_WLP_FD for field {field_id}...")
-        try:
-            df = run_model(field_id, field_to_location, model_class=Wofost72_WLP_FD)
-            wofost_wlp_results[field_id] = df
-            print(f"  ✓ Completed for {field_id}")
-        except Exception as e:
-            print(f"  ✗ Error for field {field_id}: {e}")
-            exceptions_wlp.append((field_id, str(e)))
-    
-    # Save results to Excel files
-    print("\n" + "="*80)
-    print("SAVING RESULTS TO EXCEL")
-    print("="*80)
+            print(f"Error occurred while running model for field {field_id}: {e}")
+            exceptions.append((field_id, e))
+    print(f"Model runs completed with {len(exceptions)} exceptions."
+          f"Exceptions: {exceptions}")
 
-    
-    dump_model_results_to_excel(wofost73_pp_results, 
-                                output_excel_dir / "WOFOST73_PP_results.xlsx")
+    if model_runs:
+        results_dir = Path(__file__).parent / "output" / "model_results"
+        results_dir.mkdir(parents=True, exist_ok=True)
 
-    dump_model_results_to_excel(wofost_wlp_results, 
-                                output_excel_dir / "Wofost72_WLP_FD_results.xlsx")
+        all_results = pd.concat(model_runs, ignore_index=True)
 
-    # Print summary
-    print("\n" + "="*80)
-    print("MODEL EXECUTION SUMMARY")
-    print("="*80)
-    print(f"\nWOFOST73_PP:")
-    print(f"  Successful runs: {len(wofost73_pp_results)}")
-    print(f"  Failed runs: {len(exceptions_73_pp)}")
-    if exceptions_73_pp:
-        print(f"  Failed fields: {[f[0] for f in exceptions_73_pp]}")
-    
-    print(f"\nWofost72_WLP_FD:")
-    print(f"  Successful runs: {len(wofost_wlp_results)}")
-    print(f"  Failed runs: {len(exceptions_wlp)}")
-    if exceptions_wlp:
-        print(f"  Failed fields: {[f[0] for f in exceptions_wlp]}")
-    
-    print(f"\nResults saved to: {output_excel_dir}")
+        # Always include field_id, day, year, crop_name as shared identifier columns
+        id_cols = [c for c in ['field_id', 'day', 'year', 'crop_name'] if c in all_results.columns]
+        pp_cols  = id_cols + [c for c in all_results.columns if c.startswith('PP_')]
+        wlp_cols = id_cols + [c for c in all_results.columns if c.startswith('WLP_')]
 
+        pp_path = results_dir / "WOFOST73_PP_results.xlsx"
+        wlp_path = results_dir / "WOFOST73_WLP_CWB_results.xlsx"
+
+        all_results[pp_cols].to_excel(pp_path, index=False)
+        all_results[wlp_cols].to_excel(wlp_path, index=False)
+
+        print(f"Saved PP results  → {pp_path}")
+        print(f"Saved WLP results → {wlp_path}")
 
 
 

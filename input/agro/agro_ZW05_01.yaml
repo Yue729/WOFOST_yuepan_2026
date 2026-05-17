@@ -1,35 +1,66 @@
 AgroManagement:
-- &id001 2022-12-20:
+- 2022-12-20:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2022-12-20
       crop_start_type: sowing
       crop_end_date: 2023-07-22
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
-- &id002 2024-05-01:
+- 2024-05-01:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2024-05-01
       crop_start_type: sowing
-      crop_end_date: 2024-10-27
+      crop_end_date: 2024-10-26
       crop_end_type: harvest
       crop_name: potato
       variety_name: Markies
       max_duration: 365
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2024-05-01:
+          amount: 20
+          efficiency: 0.8
+      - 2024-05-21:
+          amount: 20
+          efficiency: 0.8
+      - 2024-06-10:
+          amount: 20
+          efficiency: 0.8
+      - 2024-06-30:
+          amount: 20
+          efficiency: 0.8
+      - 2024-07-20:
+          amount: 20
+          efficiency: 0.8
+      - 2024-08-09:
+          amount: 20
+          efficiency: 0.8
+      - 2024-08-29:
+          amount: 20
+          efficiency: 0.8
+      - 2024-09-18:
+          amount: 20
+          efficiency: 0.8
+      - 2024-10-08:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: {}
-- &id003 2024-10-29:
+- 2024-10-27:
     CropCalendar:
-      crop_start_date: *id003
+      crop_start_date: 2024-10-27
       crop_start_type: sowing
       crop_end_date: 2025-07-15
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'

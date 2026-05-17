@@ -1,39 +1,98 @@
 AgroManagement:
-- &id001 2023-04-17:
+- 2023-04-17:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2023-04-17
       crop_start_type: sowing
       crop_end_date: 2023-09-29
       crop_end_type: harvest
       crop_name: potato
-      variety_name: Potato_701
+      variety_name: Fontane
       max_duration: 365
-    StateEvents:
-    - &id003
-      event_signal: irrigate
-      event_state: SM
-      zero_condition: falling
-      name: Soil moisture driven irrigation scheduling
-      comment: Irrigation applied when soil moisture reaches wilting point (20mm water)
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
       events_table:
-      - 0.04121537251893301:
-          amount: 2.0
+      - 2023-04-17:
+          amount: 20
           efficiency: 0.8
-    TimedEvents: {}
-- &id002 2025-03-24:
+      - 2023-05-07:
+          amount: 20
+          efficiency: 0.8
+      - 2023-05-27:
+          amount: 20
+          efficiency: 0.8
+      - 2023-06-16:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-06:
+          amount: 20
+          efficiency: 0.8
+      - 2023-07-26:
+          amount: 20
+          efficiency: 0.8
+      - 2023-08-15:
+          amount: 20
+          efficiency: 0.8
+      - 2023-09-04:
+          amount: 20
+          efficiency: 0.8
+      - 2023-09-24:
+          amount: 20
+          efficiency: 0.8
+    StateEvents: null
+- 2025-03-24:
     CropCalendar:
-      crop_start_date: *id002
+      crop_start_date: 2025-03-24
       crop_start_type: sowing
-      crop_end_date: &id004 2025-11-20
+      crop_end_date: 2025-11-20
       crop_end_type: harvest
       crop_name: sugarbeet
       variety_name: Sugarbeet_601
       max_duration: 365
-    StateEvents:
-    - *id003
-    TimedEvents: {}
-- *id004:
-    CropCalendar: null
+    TimedEvents:
+    - event_signal: irrigate
+      name: Irrigation application table
+      comment: Irrigation scheduled every 20 days, 20mm per event
+      events_table:
+      - 2025-03-24:
+          amount: 20
+          efficiency: 0.8
+      - 2025-04-13:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-03:
+          amount: 20
+          efficiency: 0.8
+      - 2025-05-23:
+          amount: 20
+          efficiency: 0.8
+      - 2025-06-12:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-02:
+          amount: 20
+          efficiency: 0.8
+      - 2025-07-22:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-11:
+          amount: 20
+          efficiency: 0.8
+      - 2025-08-31:
+          amount: 20
+          efficiency: 0.8
+      - 2025-09-20:
+          amount: 20
+          efficiency: 0.8
+      - 2025-10-10:
+          amount: 20
+          efficiency: 0.8
+      - 2025-10-30:
+          amount: 20
+          efficiency: 0.8
+      - 2025-11-19:
+          amount: 20
+          efficiency: 0.8
     StateEvents: null
-    TimedEvents: null
 Version: '1.0'

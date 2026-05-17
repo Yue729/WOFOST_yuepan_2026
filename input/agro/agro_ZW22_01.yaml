@@ -1,13 +1,13 @@
 AgroManagement:
-- &id001 2024-10-04:
+- 2024-10-04:
     CropCalendar:
-      crop_start_date: *id001
+      crop_start_date: 2024-10-04
       crop_start_type: sowing
       crop_end_date: 2025-07-10
       crop_end_type: harvest
       crop_name: wheat
       variety_name: Winter_wheat_101
       max_duration: 365
+    TimedEvents: null
     StateEvents: null
-    TimedEvents: {}
 Version: '1.0'
