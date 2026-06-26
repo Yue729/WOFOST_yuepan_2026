@@ -1,11 +1,8 @@
 from typing import Optional
 import re
-from pedotransfer_functions import PedotransferFunctionsWosten
 import yaml
 import shutil
 import pandas as pd
-from pedotransfer_functions import PedotransferFunctionsWosten
-from van_genuchten import ClassicalSoilWaterBalanceParameterProvider
 from types import SimpleNamespace
 from pathlib import Path
 from pcse.base import ParameterProvider
@@ -13,14 +10,23 @@ from pcse.input import YAMLCropDataProvider, NASAPowerWeatherDataProvider, YAMLA
 from pcse.models import Wofost73_PP, Wofost73_WLP_CWB
 from datetime import datetime, timedelta, date
 
-CUSTOM_SUGARBEET_FILE = Path(__file__).parent / "input" / "Wofost73_PP_sugarbeet.yaml"
+try:
+    # Works when imported as module: `from modeling import main`
+    from modeling.soil_param_calculation.pedotransfer_functions import PedotransferFunctionsWosten
+    from modeling.soil_param_calculation.van_genuchten import ClassicalSoilWaterBalanceParameterProvider
+except ModuleNotFoundError:
+    # Works when executed as script: `python modeling/main.py`
+    from soil_param_calculation.pedotransfer_functions import PedotransferFunctionsWosten
+    from soil_param_calculation.van_genuchten import ClassicalSoilWaterBalanceParameterProvider
+
+CUSTOM_SUGARBEET_FILE = Path(__file__).parent.parent / "input" / "Wofost73_PP_sugarbeet.yaml"
 
 RAW_DATA_PATH = Path(r"/Users/panyue/Desktop/final_data/")
 SOIL_DATA_FILE = RAW_DATA_PATH / "3_soil_data/general_soil_characteristics/general_soil_characteristics.xlsx"
 CROP_MANAGEMENT_DIR = RAW_DATA_PATH / "1_crop_management_data"
 LOCATION_DATA_FILE = RAW_DATA_PATH / "4_other_files/locations_data.xlsx"
 
-GLOBAL_SITE_FILE = Path(__file__).parent.joinpath(Path("input/9_Wofost81_PP_site.yaml"))
+GLOBAL_SITE_FILE = Path(__file__).parent.parent.joinpath(Path("input/9_Wofost81_PP_site.yaml"))
 MANAGEMENT_COLS = [
     "ID_all",
     "ID_field",
@@ -31,6 +37,25 @@ MANAGEMENT_COLS = [
     "date_planting",
     "date_harvest"
 ]
+
+
+def _resolve_site_file(field_id: str) -> Path:
+    """Resolve site parameter file.
+
+    Preference order:
+    1) Legacy global file: input/9_Wofost81_PP_site.yaml
+    2) Per-field file   : input/site/site_<field_id>.yaml
+    """
+    if GLOBAL_SITE_FILE.exists():
+        return GLOBAL_SITE_FILE
+
+    field_site_file = Path(__file__).parent.parent / "input" / "site" / f"site_{field_id}.yaml"
+    if field_site_file.exists():
+        return field_site_file
+
+    raise FileNotFoundError(
+        f"No site file found. Checked: {GLOBAL_SITE_FILE} and {field_site_file}"
+    )
 
 
 def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dict):
@@ -461,14 +486,15 @@ def run_model(field_id: str, field_to_location_map: dict):
     print(f"Running model for field {field_id} at location (lat: {latitude}, long: {longitude})")
     weather_data = NASAPowerWeatherDataProvider(latitude, longitude)
 
-    with open(GLOBAL_SITE_FILE, "r") as f:
+    site_file = _resolve_site_file(field_id)
+    with open(site_file, "r") as f:
         site_dict = yaml.safe_load(f.read())
 
-    soil_file = Path(__file__).parent.joinpath(Path(f"input/soil/soil_{field_id}.yaml"))
+    soil_file = Path(__file__).parent.parent.joinpath(Path(f"input/soil/soil_{field_id}.yaml"))
     with open(soil_file, "r") as f:
         soil_dict = yaml.safe_load(f.read())
 
-    agro_file = Path(__file__).parent.joinpath(Path(f"input/agro/agro_{field_id}.yaml"))
+    agro_file = Path(__file__).parent.parent.joinpath(Path(f"input/agro/agro_{field_id}.yaml"))
     agro_mgmt = YAMLAgroManagementReader(agro_file)
 
     # Build a list of (start_date, end_date, crop_name) for campaign-to-row matching.
@@ -548,7 +574,7 @@ def main():
     print(crops_varieties[CropType.BARLEY])
     print("Extracting agro management data...")
 
-    output_dir = Path(__file__).parent.joinpath(Path("input/agro"))
+    output_dir = Path(__file__).parent.parent.joinpath(Path("input/agro"))
     if output_dir.exists():
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -556,7 +582,7 @@ def main():
         print(f"Processing {f.relative_to(CROP_MANAGEMENT_DIR)}...")
         extract_agro_management_data(f, output_dir, crops_varieties)
 
-    soil_output_dir = Path(__file__).parent.joinpath(Path("input/soil"))
+    soil_output_dir = Path(__file__).parent.parent.joinpath(Path("input/soil"))
     if soil_output_dir.exists():
         shutil.rmtree(soil_output_dir)
     soil_output_dir.mkdir(parents=True, exist_ok=True)
@@ -586,7 +612,7 @@ def main():
           f"Exceptions: {exceptions}")
 
     if model_runs:
-        results_dir = Path(__file__).parent / "output" / "model_results"
+        results_dir = Path(__file__).parent.parent / "output" / "model_results"
         results_dir.mkdir(parents=True, exist_ok=True)
 
         all_results = pd.concat(model_runs, ignore_index=True)

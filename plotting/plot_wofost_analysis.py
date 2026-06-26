@@ -65,9 +65,11 @@ print(f"After year filter (2023–2025): {df.shape[0]} rows")
 # Normalize crop names for grouping
 crop_groups = {
     'sugarbeet': 'sugarbeet',
+    'sugar beet': 'sugarbeet',  # From wofost_results_analysis.xlsx
     'potato': 'potato',
     'starch potato': 'potato',
     'ware potato': 'potato',
+    'seed potato': 'potato',  # Also from wofost_results_analysis.xlsx
     'barley': 'cereal_barley',
     'spring barley': 'cereal_barley',
     'winter barley': 'cereal_barley',
@@ -120,10 +122,10 @@ def _configure_axes(axes_list, x, field_labels):
     """Apply common x-axis settings to a list of axes."""
     for ax in axes_list:
         ax.set_xticks(x)
-        ax.set_xticklabels(field_labels, rotation=55, ha='right')
-        ax.tick_params(axis='x', labelsize=9, pad=6)
-        ax.margins(x=0.02)
-        ax.grid(axis='y', alpha=0.25)
+        ax.set_xticklabels([])  # Remove field name labels
+        ax.tick_params(axis='y', labelsize=10)
+        ax.margins(x=0.01)
+        ax.grid(axis='y', alpha=0.3)
         ax.set_axisbelow(True)
 
 
@@ -148,23 +150,73 @@ def _overlay_dw(ax_abs, ax_rel, dw_df, fields, pp_yield, color, label):
         ax_rel.errorbar(dw_xpos, dw_pct_vals, yerr=dw_pct_errs, label=label, **kw)
 
 
-# Group by crop and year
+# Collect all yield values for global Y-axis range calculation
+all_yields = []
 for crop_group in sorted(df['crop_group'].dropna().unique()):
     crop_data = df[df['crop_group'] == crop_group]
-
     for year in sorted(crop_data['year'].unique()):
+        year_data = crop_data[crop_data['year'] == year].copy()
+        if not year_data.empty:
+            all_yields.extend(year_data['PP_yield_t_ha'].dropna())
+            all_yields.extend(year_data['WLP_yield_t_ha'].dropna())
+            all_yields.extend(year_data['converted_yield'].dropna())
+
+# Calculate global Y-axis range with 10% padding
+y_max = max(all_yields) * 1.1 if all_yields else 100
+print(f"\nGlobal Y-axis range: 0 to {y_max:.1f} t/ha")
+
+# Group by crop — one combined figure per crop (n_years rows × 2 cols)
+for crop_group in sorted(df['crop_group'].dropna().unique()):
+    crop_data = df[df['crop_group'] == crop_group]
+    years = sorted(crop_data['year'].unique())
+    n_years = len(years)
+
+    if n_years == 0:
+        continue
+
+    # Per-crop y_max for the absolute panel
+    crop_yields = []
+    for yr in years:
+        yd = crop_data[crop_data['year'] == yr]
+        crop_yields.extend(yd['PP_yield_t_ha'].dropna())
+        crop_yields.extend(yd['WLP_yield_t_ha'].dropna())
+        crop_yields.extend(yd['converted_yield'].dropna())
+    crop_y_max = max(crop_yields) * 1.1 if crop_yields else 100
+
+    colors_plot = {'wlp': '#FFD700', 'pp': '#4169E1'}
+
+    # Compact row height — shorter than the original single-year figure
+    row_height = 3.2
+    fig_width  = 11.69
+    fig_height = row_height * n_years + 1.0   # +1 for suptitle & legend
+
+    fig, axes = plt.subplots(
+        n_years, 2,
+        figsize=(fig_width, fig_height),
+        constrained_layout=True
+    )
+    if n_years == 1:
+        axes = axes[np.newaxis, :]   # ensure always 2-D
+
+    handles_legend = None
+    labels_legend  = None
+
+    for row_i, year in enumerate(years):
         year_data = crop_data[crop_data['year'] == year].copy()
 
         if year_data.empty:
+            for col in range(2):
+                axes[row_i, col].set_visible(False)
             continue
 
         print(f"\nProcessing {crop_group} - {year}: {len(year_data)} records")
 
-        # Sort by field for consistent X-axis ordering
-        year_data = year_data.sort_values('ID_field').reset_index(drop=True)
+        # Sort by yield gap: largest gap first
+        year_data['gap_to_pp'] = year_data['PP_yield_t_ha'] - year_data['converted_yield']
+        year_data = year_data.sort_values('gap_to_pp', ascending=False).reset_index(drop=True)
         year_data['field_label'] = year_data['ID_field'].astype(str)
 
-        x = np.arange(len(year_data))
+        x         = np.arange(len(year_data))
         actual    = year_data['converted_yield'].to_numpy(dtype=float)
         wlp_yield = year_data['WLP_yield_t_ha'].to_numpy(dtype=float)
         pp_yield  = year_data['PP_yield_t_ha'].to_numpy(dtype=float)
@@ -174,48 +226,73 @@ for crop_group in sorted(df['crop_group'].dropna().unique()):
         wlp_pct    = wlp_yield / denom * 100
         pp_pct     = np.full_like(pp_yield, 100.0)
 
-        colors = {'wlp': '#FFD700', 'pp': '#4169E1'}
-        width  = max(14, len(year_data) * 0.7)
+        ax_abs = axes[row_i, 0]
+        ax_rel = axes[row_i, 1]
 
-        # ── All crops: 1×2 layout ────────────────────────────────────────────
-        fig, axes = plt.subplots(1, 2, figsize=(width, 7), constrained_layout=True)
+        # Panel labels A–F (row_i * 2 cols: A=0, B=1, C=2, D=3, E=4, F=5)
+        panel_labels = 'ABCDEF'
+        for col_i, ax in enumerate([ax_abs, ax_rel]):
+            label_idx = row_i * 2 + col_i
+            if label_idx < len(panel_labels):
+                ax.text(0.01, 0.98, panel_labels[label_idx],
+                        transform=ax.transAxes,
+                        fontsize=14, fontweight='bold', va='top', ha='left')
+        ax_abs.bar(x, pp_yield,  width=0.6, color=colors_plot['pp'],  edgecolor='#333333',
+                   label='Potential yield (Yp)', alpha=0.7)
+        ax_abs.bar(x, wlp_yield, width=0.6, color=colors_plot['wlp'], edgecolor='#333333',
+                   label='Water-limited yield (Ywl)', alpha=0.9)
+        ax_abs.plot(x, actual, linestyle=':', linewidth=2.5, marker='o', markersize=5,
+                    color='#D32F2F', label='Actual yield', zorder=4)
+        ax_abs.set_ylabel(f'{year}\nYield (t ha$^{{-1}}$)', fontsize=12, fontweight='bold')
+        ax_abs.set_ylim(0, crop_y_max)
 
-        axes[0].bar(x, pp_yield,  width=0.6, color=colors['pp'],  edgecolor='#333333', label='PP yield (TWSO)',  alpha=0.7)
-        axes[0].bar(x, wlp_yield, width=0.6, color=colors['wlp'], edgecolor='#333333', label='WLP yield (TWSO)', alpha=0.9)
-        axes[0].plot(x, actual, linestyle=':', linewidth=2.5, marker='o', markersize=5,
-                     color='#D32F2F', label='Actual yield', zorder=4)
-        axes[0].set_ylabel('Yield (t ha$^{-1}$)')
-        axes[0].set_title('Absolute yield')
+        # ── Relative panel ─────────────────────────────────────────────────
+        ax_rel.bar(x, pp_pct,  width=0.6, color=colors_plot['pp'],  edgecolor='#333333',
+                   label='Potential yield Yp (100%)', alpha=0.7)
+        ax_rel.bar(x, wlp_pct, width=0.6, color=colors_plot['wlp'], edgecolor='#333333',
+                   label='Water-limited yield (Ywl)', alpha=0.9)
+        ax_rel.plot(x, actual_pct, linestyle=':', linewidth=2.5, marker='o', markersize=5,
+                    color='#D32F2F', label='Actual yield', zorder=4)
+        ax_rel.set_ylabel('Share of Yp (%)', fontsize=12, fontweight='bold')
+        ax_rel.set_ylim(0, 120)
 
-        axes[1].bar(x, pp_pct,  width=0.6, color=colors['pp'],  edgecolor='#333333', label='PP yield (100%)', alpha=0.7)
-        axes[1].bar(x, wlp_pct, width=0.6, color=colors['wlp'], edgecolor='#333333', label='WLP yield',       alpha=0.9)
-        axes[1].plot(x, actual_pct, linestyle=':', linewidth=2.5, marker='o', markersize=5,
-                     color='#D32F2F', label='Actual yield', zorder=4)
-        axes[1].set_ylabel('Share of PP yield (%)')
-        axes[1].set_ylim(0, 120)
-        axes[1].set_title('Relative to PP')
+        # Column titles on the first row only
+        if row_i == 0:
+            ax_abs.set_title('Absolute yield', fontsize=14, fontweight='bold')
+            ax_rel.set_title('Relative to Yp', fontsize=14, fontweight='bold')
+
+        for ax in [ax_abs, ax_rel]:
+            ax.set_xticks(x)
+            ax.set_xticklabels([])
+            ax.set_xlabel('')
+            ax.tick_params(axis='y', labelsize=10)
+            ax.margins(x=0.01)
+            ax.grid(axis='y', alpha=0.3)
+            ax.set_axisbelow(True)
 
         # Measured dry weight / grain yield overlay (2025 only)
         if year == 2025 and crop_group in dw_data:
             dw_label = 'Measured grain yield' if 'cereal' in crop_group else 'Measured dry weight'
-            _overlay_dw(axes[0], axes[1], dw_data[crop_group],
+            _overlay_dw(ax_abs, ax_rel, dw_data[crop_group],
                         year_data['ID_field'], pp_yield,
                         '#1a7a1a', dw_label)
 
-        _configure_axes(axes, x, year_data['field_label'])
+        if handles_legend is None:
+            handles_legend, labels_legend = ax_abs.get_legend_handles_labels()
 
-        handles, labels = axes[0].get_legend_handles_labels()
-        fig.legend(handles, labels, loc='outside lower center', ncol=4, frameon=False)
+    # Shared legend below the panel
+    if handles_legend:
+        fig.legend(handles_legend, labels_legend,
+                   loc='outside lower center', ncol=4, frameon=False, fontsize=12)
 
-        # Title and save
-        pretty_crop = crop_group.replace('_', ' ').title()
-        fig.suptitle(f'{pretty_crop} {year}: actual vs WLP vs PP', fontsize=14)
+    # Overall title
+    pretty_crop = crop_group.replace('_', ' ').title()
+    fig.suptitle(f'{pretty_crop}: actual vs Ywl vs Yp', fontsize=16, fontweight='bold')
 
-        safe_crop = crop_group.lower().replace(' ', '_')
-        plot_path = plot_dir / f"{safe_crop}_{year}_yield_comparison.png"
-        fig.savefig(plot_path, dpi=300, bbox_inches='tight')
-        plt.close(fig)
-
-        print(f"  ✓ Saved: {plot_path.name}")
+    safe_crop = crop_group.lower().replace(' ', '_')
+    plot_path = plot_dir / f"{safe_crop}_all_years_yield_comparison.png"
+    fig.savefig(plot_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f"  ✓ Saved: {plot_path.name}")
 
 print(f"\n✓ All plots saved to: {plot_dir}")

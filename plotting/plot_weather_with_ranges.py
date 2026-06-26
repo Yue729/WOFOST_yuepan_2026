@@ -70,32 +70,46 @@ ax.legend(loc='upper left', fontsize=10, title='Year')
 ax.grid(True, alpha=0.2)
 ax.set_ylim(bottom=0)
 
-# ============ C) TEMPERATURE ============
+# ============ C) CUMULATIVE EVAPOTRANSPIRATION (Penman-Monteith) ============
+from pcse.util import penman_monteith as _pm
+import datetime
+
+# Use a representative location (centre of the Netherlands)
+LAT = 52.3
+
 ax = axes[2]
 for year in sorted(weather_filtered['year'].unique()):
     data = weather_filtered[weather_filtered['year'] == year].sort_values('doy').reset_index(drop=True)
-    
-    tmax = data['TMAX'].values
-    tmin = data['TMIN'].values
-    tavg = (tmax + tmin) / 2
-    doy = data['doy'].values
-    
-    # Plot Tmax and Tmin as boundaries with filled area
-    ax.fill_between(doy, tmax, tmin, color=colors[year], alpha=0.2, label=f'{year_labels[year]} range')
-    
-    # Plot the average line
-    ax.plot(doy, tavg, color=colors[year], linewidth=2.5, label=f'{year_labels[year]} Tavg', alpha=0.9)
-    
-    # Plot min and max as dashed lines
-    ax.plot(doy, tmax, color=colors[year], linewidth=1.5, linestyle='--', alpha=0.6)
-    ax.plot(doy, tmin, color=colors[year], linewidth=1.5, linestyle=':', alpha=0.6)
 
-ax.set_xlabel('Date', fontsize=11, fontweight='bold')
-ax.set_ylabel('Temperature (°C)', fontsize=11, fontweight='bold')
+    et0_vals = []
+    for _, row in data.iterrows():
+        try:
+            day = datetime.date(int(row['DAY']) // 10000,
+                                (int(row['DAY']) % 10000) // 100,
+                                int(row['DAY']) % 100)
+            et0 = _pm(day, LAT, 0,
+                      float(row['TMIN']), float(row['TMAX']),
+                      float(row['IRRAD']), float(row['VAP']), float(row['WIND']))
+            et0_vals.append(et0)
+        except Exception:
+            et0_vals.append(np.nan)
+
+    data['ET0'] = et0_vals
+    cum_et0 = pd.Series(et0_vals).cumsum()
+    doy = data['doy'].values
+    ax.plot(doy, cum_et0, color=colors[year], linewidth=2.5,
+            label=year_labels[year], alpha=0.8)
+    # Rolling uncertainty band
+    rolling_std = cum_et0.rolling(window=window, center=True, min_periods=1).std().fillna(0)
+    ax.fill_between(doy, cum_et0 - rolling_std, cum_et0 + rolling_std,
+                    color=colors[year], alpha=0.15)
+
+ax.set_xlabel('Day of Year', fontsize=10, fontweight='bold')
+ax.set_ylabel('Cumulative evapotranspiration (mm)', fontsize=10, fontweight='bold')
 ax.set_title('C)', fontsize=12, fontweight='bold', loc='left')
-ax.legend(loc='upper right', fontsize=9, ncol=3)
+ax.legend(loc='upper left', fontsize=10, title='Year')
 ax.grid(True, alpha=0.2)
-ax.axhline(y=0, color='k', linestyle='-', linewidth=0.5, alpha=0.3)
+ax.set_ylim(bottom=0)
 
 plt.tight_layout()
 

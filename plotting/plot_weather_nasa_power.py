@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 from pathlib import Path
+from pcse.util import penman_monteith
 
 # ============================================================
 # COORDINATE CONVERSION: Dutch RD New (EPSG:28992) -> WGS84
@@ -39,7 +40,7 @@ def fetch_nasa_power(lat, lon, start='20230101', end='20251231'):
     """Fetch daily weather data from NASA POWER API."""
     url = (
         f"https://power.larc.nasa.gov/api/temporal/daily/point"
-        f"?parameters=T2M_MAX,T2M_MIN,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN"
+        f"?parameters=T2M_MAX,T2M_MIN,T2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN,QV2M,WS2M"
         f"&community=AG&longitude={lon}&latitude={lat}"
         f"&start={start}&end={end}&format=JSON"
     )
@@ -55,6 +56,8 @@ def fetch_nasa_power(lat, lon, start='20230101', end='20251231'):
         'tavg':   list(data['T2M'].values()),
         'precip': list(data['PRECTOTCORR'].values()),
         'irrad':  list(data['ALLSKY_SFC_SW_DWN'].values()),  # MJ/m2/day
+        'vap':    list(data['QV2M'].values()),               # kg/kg specific humidity → use as proxy (hPa)
+        'wind':   list(data['WS2M'].values()),               # m/s wind speed at 2m
     })
     df['doy'] = df['date'].dt.dayofyear
     df['year'] = df['date'].dt.year
@@ -150,3 +153,85 @@ def make_plot(df, region_name, out_path):
 
 make_plot(df_dr, 'DR region (Drenthe)',           output_dir / 'weather_nasa_power_DR_2023_2025.png')
 make_plot(df_zw, 'ZW region (Zeeland/Z-Holland)', output_dir / 'weather_nasa_power_ZW_2023_2025.png')
+
+# ============================================================
+# COMBINED SIDE-BY-SIDE PLOT: DR (left) vs ZW (right)
+# ============================================================
+fig, axes = plt.subplots(3, 2, figsize=(16, 15), sharey='row', sharex='col')
+fig.suptitle('Weather data 2023–2025: DR region vs ZW region', fontsize=16, fontweight='bold')
+
+region_titles = ['DR region (Drenthe)', 'ZW region (Zeeland/Z-Holland)']
+datasets = [df_dr, df_zw]
+
+for col, (df, region_title) in enumerate(zip(datasets, region_titles)):
+    for year in years:
+        data  = df[df['year'] == year].sort_values('doy')
+        doy   = data['doy'].values
+        color = colors[year]
+
+        # A) Cumulative Precipitation
+        cum_p = data['precip'].cumsum().values
+        axes[0, col].plot(doy, cum_p, color=color, linewidth=2, label=str(year))
+
+        # B) Cumulative Global Radiation
+        cum_r = data['irrad'].cumsum().values
+        axes[1, col].plot(doy, cum_r, color=color, linewidth=2, label=str(year))
+
+        # C) Cumulative Evapotranspiration (Penman-Monteith)
+        et0_vals = []
+        region_lat = dr_lat if col == 0 else zw_lat
+        for _, row in data.iterrows():
+            try:
+                d = row['date'].date()
+                # irrad: MJ/m2/day → J/m2/day; vap: kg/kg * ~1000 ≈ hPa proxy
+                et0 = penman_monteith(d, region_lat, 0,
+                                      float(row['tmin']), float(row['tmax']),
+                                      float(row['irrad']) * 1e6,
+                                      float(row['vap']) * 1000,
+                                      float(row['wind']))
+            except Exception:
+                et0 = np.nan
+            et0_vals.append(et0)
+        cum_et0 = np.nancumsum(et0_vals)
+        axes[2, col].plot(doy, cum_et0, color=color, linewidth=2, label=str(year))
+
+    # Column titles
+    axes[0, col].set_title(region_title, fontsize=14, fontweight='bold', pad=8)
+
+    # Row labels (only left column gets y-labels)
+    if col == 0:
+        axes[0, col].set_ylabel('Cumulative precipitation (mm)', fontsize=13, fontweight='bold')
+        axes[1, col].set_ylabel('Cumulative global radiation (MJ m⁻²)', fontsize=13, fontweight='bold')
+        axes[2, col].set_ylabel('Cumulative evapotranspiration (mm)', fontsize=13, fontweight='bold')
+
+    # Row panel labels (A–F sequentially: row*2+col)
+    panel_labels = 'ABCDEF'
+    for row in range(3):
+        label = panel_labels[row * 2 + col] + ')'
+        axes[row, col].set_title(f'{label}', loc='left', fontweight='bold', fontsize=14)
+        axes[row, col].grid(True, alpha=0.25, linestyle='--')
+        axes[row, col].set_xticks(month_ticks)
+        axes[row, col].tick_params(axis='y', labelsize=11)
+
+    axes[0, col].set_ylim(bottom=0)
+    axes[1, col].set_ylim(bottom=0)
+    axes[2, col].set_ylim(bottom=0, auto=True)
+    axes[2, col].autoscale(axis='y')
+    axes[2, col].margins(y=0.1)
+
+    # X-axis: only bottom row gets month labels
+    axes[0, col].set_xticklabels([])
+    axes[1, col].set_xticklabels([])
+    axes[2, col].set_xticklabels(month_labels, fontsize=11)
+    axes[2, col].set_xlabel('Month', fontsize=13, fontweight='bold')
+
+    # Legend on each panel
+    axes[0, col].legend(title='Year', loc='upper left', fontsize=11, title_fontsize=11)
+    axes[1, col].legend(title='Year', loc='upper left', fontsize=11, title_fontsize=11)
+    axes[2, col].legend(title='Year', loc='upper left', fontsize=11, title_fontsize=11)
+
+plt.tight_layout()
+combined_path = output_dir / 'weather_nasa_power_DR_ZW_combined_2023_2025.png'
+plt.savefig(combined_path, dpi=300, bbox_inches='tight')
+print(f"✓ Saved combined plot: {combined_path}")
+plt.close()
