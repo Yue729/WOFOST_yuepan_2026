@@ -127,7 +127,6 @@ def extract_agro_management_data(f: Path, output_dir: Path, crops_varieties: dic
             variety = resolve_variety(normalized_crop_name, raw_variety)
 
             # ── Build irrigation events (20mm every 20 days, 0.8 efficiency) ───
-            # CORRECT FORMAT: TimedEvents is a list with single dict containing events_table
             timed_events = None
             irr_key = (str(row["ID_field"]).strip(), int(row["year"]))
             if irrigation_map.get(irr_key) == "yes":
@@ -348,6 +347,111 @@ def get_ID_field_to_location_map() -> dict:
     return d
 
 
+def load_irrigation_data() -> dict:
+    """Scan the crop registration extra files and return a mapping of irrigation flags.
+
+    Returns a dict keyed by "{ID_field}_{year}" with boolean values True/False.
+    Looks for files named like "crop_registration_extra_*.xlsx" under CROP_MANAGEMENT_DIR.
+    """
+    irrigation = {}
+    for f in CROP_MANAGEMENT_DIR.rglob("crop_registration_extra_*.xlsx"):
+        try:
+            df = pd.read_excel(f)
+            df.columns = df.columns.astype(str).str.strip()
+            if all(c in df.columns for c in ("ID_field", "year", "irrigation_main_crop")):
+                for _, row in df.iterrows():
+                    id_field = str(row["ID_field"]).strip()
+                    try:
+                        year = int(row["year"])
+                    except Exception:
+                        # fall back to string year-like value
+                        year = int(str(row["year"]).strip()) if pd.notna(row["year"]) else None
+                    key = f"{id_field}_{year}"
+                    val = str(row["irrigation_main_crop"]).strip().lower()
+                    irrigation[key] = val in ("yes", "y", "true", "1")
+        except Exception as e:
+            print(f"  ⚠ Could not read irrigation file {f}: {e}")
+    return irrigation
+
+
+def add_irrigation_to_agro_yaml(agro_yaml: dict, field_id: str, is_irrigated: bool,
+                               soil_data: dict = None, water_amount_mm: float = 20.0,
+                               efficiency: float = 0.8) -> dict:
+    """Add timed irrigation events to an AgroManagement YAML structure.
+
+    For each campaign in `agro_yaml["AgroManagement"]` where there is a CropCalendar,
+    and if `is_irrigated` is True, this inserts a `TimedEvents` entry with
+    events every 20 days of `water_amount_mm` mm starting from sowing+20 days up to
+    harvest-20 days (inclusive where dates allow).
+
+    Returns the modified agro_yaml (modified in-place and also returned).
+    """
+    from datetime import datetime, date
+
+    def _to_date(d):
+        if d is None:
+            return None
+        if isinstance(d, date) and not isinstance(d, datetime):
+            return d
+        if isinstance(d, datetime):
+            return d.date()
+        if isinstance(d, str):
+            # accept ISO format
+            try:
+                return date.fromisoformat(d)
+            except Exception:
+                try:
+                    return datetime.strptime(d, "%Y-%m-%d").date()
+                except Exception:
+                    return None
+        # pandas Timestamp
+        try:
+            return d.to_pydatetime().date()
+        except Exception:
+            return None
+
+    ag = agro_yaml.get("AgroManagement") if isinstance(agro_yaml, dict) else None
+    if ag is None:
+        return agro_yaml
+
+    for campaign in ag:
+        # campaign is a dict with single date key
+        for start_key, content in list(campaign.items()):
+            cal = content.get("CropCalendar") or {}
+            sow = _to_date(cal.get("crop_start_date"))
+            harvest = _to_date(cal.get("crop_end_date"))
+            if not sow or not harvest:
+                continue
+            if not is_irrigated:
+                # ensure TimedEvents remains as is (do not add irrigation)
+                continue
+
+            # compute start = sow + 20 days, end = harvest - 20 days
+            start_dt = sow + timedelta(days=20)
+            end_dt = harvest - timedelta(days=20)
+            if start_dt > end_dt:
+                # not enough window for timed irrigation; skip
+                continue
+
+            events_table = []
+            cur = start_dt
+            while cur <= end_dt:
+                events_table.append({cur: {"amount": water_amount_mm, "efficiency": efficiency}})
+                cur = cur + timedelta(days=20)
+
+            timed_events = [{
+                "event_signal": "irrigate",
+                "name": "Irrigation application table",
+                "comment": "Irrigation scheduled every 20 days, 20mm per event",
+                "events_table": events_table
+            }]
+
+            # Insert or replace TimedEvents
+            content["TimedEvents"] = timed_events
+
+    return agro_yaml
+
+
 from enum import StrEnum
 
 class CropType(StrEnum):
@@ -422,7 +526,7 @@ _POTATO_WOFOST_VARIETIES = {
     'innovator': 'Innovator',
     'markies':   'Markies',
 }
-_POTATO_FALLBACK = 'Fontane'
+_POTATO_FALLBACK = 'Fontane' #can be changed
 
 def resolve_variety(crop_type: CropType, raw_variety: str) -> str:
     """Resolve the WOFOST variety name from the crop type and raw field variety string."""
@@ -597,9 +701,32 @@ def main():
     if not fields_from_agro.issubset(fields_from_soil):
         raise RuntimeError(f"Some fields in soil data are missing from agro data. Soil: {fields_from_soil}, Agro: {fields_from_agro}")
 
+    # Skip fields that have empty AgroManagement (no valid campaigns),
+    # because PCSE raises IndexError when initializing agromanagement.
+    valid_fields_from_agro = set()
+    skipped_empty_agro = []
+    for field_id in fields_from_agro:
+        agro_file = output_dir / f"agro_{field_id}.yaml"
+        try:
+            with open(agro_file, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+            campaigns = data.get("AgroManagement") or []
+            if isinstance(campaigns, list) and len(campaigns) > 0:
+                valid_fields_from_agro.add(field_id)
+            else:
+                skipped_empty_agro.append(field_id)
+        except Exception as e:
+            print(f"Skipping field {field_id}: could not read {agro_file.name} ({e})")
+
+    if skipped_empty_agro:
+        print(
+            f"Skipping {len(skipped_empty_agro)} field(s) with empty AgroManagement: "
+            f"{sorted(skipped_empty_agro)}"
+        )
+
     model_runs = []
     exceptions = []
-    for field_id in fields_from_agro:
+    for field_id in valid_fields_from_agro:
         print(f"Running model for field {field_id}...")
         try:
             df = run_model(field_id, field_to_location)
